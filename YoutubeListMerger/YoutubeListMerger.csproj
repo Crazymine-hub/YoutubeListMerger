@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="classes\VideoInfo.cs" />
     <EmbeddedResource Include="MergerForm.resx">
       <DependentUpon>MergerForm.cs</DependentUpon>
     </EmbeddedResource>
