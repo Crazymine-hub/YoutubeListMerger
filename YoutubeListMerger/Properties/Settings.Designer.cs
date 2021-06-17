@@ -23,16 +23,13 @@ namespace YoutubeListMerger.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://www.youtube.com\r\nhttps://youtu.be\r\nhttps://youtbe.com\r\nwww.youtbe.com\r\nyo" +
             "utu.be\r\nyoutube.com")]
         public string ValidYouTubeUrls {
             get {
                 return ((string)(this["ValidYouTubeUrls"]));
-            }
-            set {
-                this["ValidYouTubeUrls"] = value;
             }
         }
     }

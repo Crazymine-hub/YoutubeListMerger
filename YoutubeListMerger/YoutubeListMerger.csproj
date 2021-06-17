@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\OnlineImage.cs" />
     <Compile Include="MergerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,7 +83,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="classes\VideoInfo.cs" />
+    <Compile Include="Classes\VideoInfo.cs" />
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="MergerForm.resx">
       <DependentUpon>MergerForm.cs</DependentUpon>
     </EmbeddedResource>

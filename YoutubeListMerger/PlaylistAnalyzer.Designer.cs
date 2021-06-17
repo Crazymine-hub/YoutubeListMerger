@@ -39,7 +39,7 @@ namespace YoutubeListMerger
             this.TitleLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TitleLabel.Location = new System.Drawing.Point(0, 0);
             this.TitleLabel.Name = "TitleLabel";
-            this.TitleLabel.Size = new System.Drawing.Size(298, 13);
+            this.TitleLabel.Size = new System.Drawing.Size(138, 13);
             this.TitleLabel.TabIndex = 0;
             this.TitleLabel.Text = "ListTitle";
             // 
@@ -49,10 +49,10 @@ namespace YoutubeListMerger
             this.ListLoadProgress.Location = new System.Drawing.Point(0, 13);
             this.ListLoadProgress.MaximumSize = new System.Drawing.Size(0, 20);
             this.ListLoadProgress.Name = "ListLoadProgress";
-            this.ListLoadProgress.Size = new System.Drawing.Size(298, 20);
+            this.ListLoadProgress.Size = new System.Drawing.Size(138, 20);
             this.ListLoadProgress.Step = 1;
+            this.ListLoadProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.ListLoadProgress.TabIndex = 1;
-            this.ListLoadProgress.Value = 50;
             // 
             // PlaylistAnalyzer
             // 
@@ -64,7 +64,7 @@ namespace YoutubeListMerger
             this.MaximumSize = new System.Drawing.Size(0, 33);
             this.MinimumSize = new System.Drawing.Size(0, 33);
             this.Name = "PlaylistAnalyzer";
-            this.Size = new System.Drawing.Size(298, 33);
+            this.Size = new System.Drawing.Size(138, 33);
             this.ResumeLayout(false);
 
         }
