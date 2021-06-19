@@ -14,12 +14,14 @@ namespace YoutubeListMerger.Classes
         public delegate void SimpleCallback();
 
         public string ID { get; }
+        public string UniqueId { get => (IsChannelPlaylist ? "C_" : "L_") + Title; }
         public string Title { get; private set; } = "<To be analyzed>";
         public string Description { get; private set; } = "<This Playlist hasn't been analyzed yet>";
         public DateTime PublishDate { get; private set; } = DateTime.Now;
         public Image Thumbnail { get; private set; }
         public string Channel { get; private set; } = "<Youtube PlaylistMerger>";
         public int InaccessibleVideoCount { get; private set; }
+        public string ChannelUploadPlaylistID { get; private set; }
 
 
         public List<VideoInfo> VideoList { get; private set; } = new List<VideoInfo>();
@@ -50,14 +52,6 @@ namespace YoutubeListMerger.Classes
             finishedCallback = finished;
         }
 
-        public PlaylistAnalyzer(string customTitle, string customDecription)
-        {
-            IsCustom = true;
-            Description = customDecription;
-            WorkerTask = Task.CompletedTask;
-            Title = customTitle;
-        }
-
         private void ListVideos()
         {
             if (IsCustom) throw new InvalidOperationException("Custom Playlists cannot be scanned.");
@@ -76,14 +70,35 @@ namespace YoutubeListMerger.Classes
             Description = listDetails.Snippet.Description;
             PublishDate = listDetails.Snippet.PublishedAt ?? DateTime.Now;
             TotalVideos = listDetails.ContentDetails.ItemCount ?? 0;
+            Thumbnail = OnlineImage.GetBestResolution(listDetails.Snippet.Thumbnails);
 
-            Thumbnail = OnlineImage.GetImageFromUrl(listDetails.Snippet.Thumbnails.Maxres.Url);
+            ListPlaylistItems(ID);
+        }
 
-            var listQuery = new YT.PlaylistItemsResource.ListRequest(youTube, new string[] { "contentDetails", "snippet" }) { PlaylistId = ID };
+        private void AnalyzeChannel()
+        {
+            var query = new YT.ChannelsResource.ListRequest(youTube, new string[] { "snippet", "contentDetails" }) { Id = ID };
+
+            var result = query.Execute();
+            var channelDetails = result.Items[0];
+
+            Title = channelDetails.Snippet.Title;
+            Description = channelDetails.Snippet.Description;
+            PublishDate = channelDetails.Snippet.PublishedAt ?? DateTime.Now;
+            Thumbnail = OnlineImage.GetBestResolution(channelDetails.Snippet.Thumbnails);
+            ChannelUploadPlaylistID = channelDetails.ContentDetails.RelatedPlaylists.Uploads;
+
+            ListPlaylistItems(ChannelUploadPlaylistID);
+        }
+
+        private void ListPlaylistItems(string id)
+        {
+            var listQuery = new YT.PlaylistItemsResource.ListRequest(youTube, new string[] { "contentDetails", "snippet" }) { PlaylistId = id };
             do
             {
                 var queryResult = listQuery.Execute();
                 listQuery.PageToken = queryResult.NextPageToken;
+                TotalVideos = queryResult.PageInfo.TotalResults ?? 0;
 
                 foreach (var playlistItem in queryResult.Items)
                 {
@@ -95,11 +110,6 @@ namespace YoutubeListMerger.Classes
                     redrawCallback?.Invoke();
                 }
             } while (listQuery.PageToken != null);
-        }
-
-        private void AnalyzeChannel()
-        {
-            throw new NotImplementedException();
         }
 
         public override string ToString()
