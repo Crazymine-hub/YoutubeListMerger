@@ -8,10 +8,12 @@ using YT = Google.Apis.YouTube.v3;
 
 namespace YoutubeListMerger.Classes
 {
-    public class PlaylistAnalyzer
+    public class PlaylistAnalyzer: YoutubeItemDetail
     {
-        private YT.YouTubeService youTube;
         public delegate void SimpleCallback();
+
+        private YT.YouTubeService youTube;
+        private List<VideoInfo> videoList = new List<VideoInfo>();
 
         public string ID { get; }
         public string UniqueId { get => (IsChannelPlaylist ? "C_" : "L_") + Title; }
@@ -23,8 +25,7 @@ namespace YoutubeListMerger.Classes
         public int InaccessibleVideoCount { get; private set; }
         public string ChannelUploadPlaylistID { get; private set; }
 
-
-        public List<VideoInfo> VideoList { get; private set; } = new List<VideoInfo>();
+        public IReadOnlyList<VideoInfo> VideoList => videoList.AsReadOnly();
         public long TotalVideos { get; private set; }
         public bool IsChannelPlaylist { get; }
         public Task WorkerTask { get; private set; }
@@ -35,12 +36,21 @@ namespace YoutubeListMerger.Classes
             {
                 float progress = 0;
                 if (TotalVideos - InaccessibleVideoCount > 0)
-                    progress = VideoList.Count / Convert.ToSingle(TotalVideos - InaccessibleVideoCount);
+                    progress = videoList.Count / Convert.ToSingle(TotalVideos - InaccessibleVideoCount);
                 return progress;
             }
         }
         private SimpleCallback redrawCallback;
         private EventHandler finishedCallback;
+
+        public PlaylistAnalyzer(string customTitle, string customDecription, YT.YouTubeService youTubeService)
+        {
+            IsCustom = true;
+            youTube = youTubeService;
+            Description = customDecription;
+            WorkerTask = Task.CompletedTask;
+            Title = customTitle;
+        }
 
         public PlaylistAnalyzer(string id, bool isChannel, YT.YouTubeService youTubeService, SimpleCallback redraw, EventHandler finished)
         {
@@ -94,21 +104,27 @@ namespace YoutubeListMerger.Classes
         private void ListPlaylistItems(string id)
         {
             var listQuery = new YT.PlaylistItemsResource.ListRequest(youTube, new string[] { "contentDetails", "snippet" }) { PlaylistId = id };
+            var pageCnt = 0;
+            var waitTask = Task.CompletedTask;
             do
             {
                 var queryResult = listQuery.Execute();
                 listQuery.PageToken = queryResult.NextPageToken;
                 TotalVideos = queryResult.PageInfo.TotalResults ?? 0;
 
+                if (++pageCnt % Properties.Settings.Default.AnalyzePauseInterval == 0)
+                    waitTask = Task.Delay(Properties.Settings.Default.AnalyzeDelay);
+
                 foreach (var playlistItem in queryResult.Items)
                 {
-                    var video = new VideoInfo(playlistItem);
+                    var video = VideoInfo.GetVideo(playlistItem);
                     if (video.Channel != null)
-                        VideoList.Add(video);
+                        videoList.Add(video);
                     else
                         ++InaccessibleVideoCount;
-                    redrawCallback?.Invoke();
                 }
+                redrawCallback?.Invoke();
+                waitTask.Wait();
             } while (listQuery.PageToken != null);
         }
 
@@ -116,10 +132,27 @@ namespace YoutubeListMerger.Classes
         {
             string result = Title;
             if (WorkerTask.IsCompleted)
-                result += " ✔DONE";
+            {
+                if (!IsCustom)
+                    result += " ✔DONE";
+            }
             else
                 result += $" {(Progress * 100):0}%";
             return result;
+        }
+
+        public void AddVideo(string videoId)
+        {
+            if (!IsCustom) throw new InvalidOperationException("Only custom Playlists can be modified");
+            var videoQuery = new YT.VideosResource.ListRequest(youTube, new string[] { "id", "snippet", "contentDetails" }) { Id = videoId };
+            var queryResult = videoQuery.Execute();
+            videoList.Add(VideoInfo.GetVideo(queryResult.Items[0]));
+        }
+
+        public void RemoveVideo(VideoInfo videoInfo)
+        {
+            if (!IsCustom) throw new InvalidOperationException("Only custom Playlists can be modified");
+            videoList.Remove(videoInfo);
         }
     }
 }

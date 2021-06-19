@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Classes\OnlineImage.cs" />
     <Compile Include="Classes\PlaylistAnalyzer.cs" />
+    <Compile Include="Classes\YoutubeItemDetail.cs" />
     <Compile Include="MergerForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -32,5 +32,29 @@ namespace YoutubeListMerger.Properties {
                 return ((string)(this["ValidYouTubeUrls"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int AnalyzeDelay {
+            get {
+                return ((int)(this["AnalyzeDelay"]));
+            }
+            set {
+                this["AnalyzeDelay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int AnalyzePauseInterval {
+            get {
+                return ((int)(this["AnalyzePauseInterval"]));
+            }
+            set {
+                this["AnalyzePauseInterval"] = value;
+            }
+        }
     }
 }

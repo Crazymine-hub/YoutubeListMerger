@@ -10,5 +10,11 @@ www.youtbe.com
 youtu.be
 youtube.com</Value>
     </Setting>
+    <Setting Name="AnalyzeDelay" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="AnalyzePauseInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
