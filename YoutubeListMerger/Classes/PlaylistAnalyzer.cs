@@ -18,7 +18,7 @@ namespace YoutubeListMerger.Classes
         public string Title { get; private set; } = "<To be analyzed>";
         public string Description { get; private set; } = "<This Playlist hasn't been analyzed yet>";
         public DateTime PublishDate { get; private set; } = DateTime.Now;
-        public Image Thumbnail { get; private set; }
+        public string ThumbnailUrl { get; private set; }
         public string Channel { get; private set; } = "<Youtube PlaylistMerger>";
         public int InaccessibleVideoCount { get; private set; }
         public string ChannelUploadPlaylistID { get; private set; }
@@ -70,7 +70,7 @@ namespace YoutubeListMerger.Classes
             Description = listDetails.Snippet.Description;
             PublishDate = listDetails.Snippet.PublishedAt ?? DateTime.Now;
             TotalVideos = listDetails.ContentDetails.ItemCount ?? 0;
-            Thumbnail = OnlineImage.GetBestResolution(listDetails.Snippet.Thumbnails);
+            ThumbnailUrl = OnlineImage.GetBestResolution(listDetails.Snippet.Thumbnails);
 
             ListPlaylistItems(ID);
         }
@@ -85,7 +85,7 @@ namespace YoutubeListMerger.Classes
             Title = channelDetails.Snippet.Title;
             Description = channelDetails.Snippet.Description;
             PublishDate = channelDetails.Snippet.PublishedAt ?? DateTime.Now;
-            Thumbnail = OnlineImage.GetBestResolution(channelDetails.Snippet.Thumbnails);
+            ThumbnailUrl = OnlineImage.GetBestResolution(channelDetails.Snippet.Thumbnails);
             ChannelUploadPlaylistID = channelDetails.ContentDetails.RelatedPlaylists.Uploads;
 
             ListPlaylistItems(ChannelUploadPlaylistID);

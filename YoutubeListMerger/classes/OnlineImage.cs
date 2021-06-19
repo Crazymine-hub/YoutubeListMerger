@@ -21,19 +21,19 @@ namespace YoutubeListMerger.Classes
             }
         }
 
-        public static Image GetBestResolution(YT.ThumbnailDetails thumbnail)
+        public static string GetBestResolution(YT.ThumbnailDetails thumbnail)
         {
             if (thumbnail.Maxres != null && thumbnail.Maxres.Url != null)
-                return GetImageFromUrl(thumbnail.Maxres.Url);
+                return thumbnail.Maxres.Url;
             if (thumbnail.Standard != null && thumbnail.Standard.Url != null)
-                return GetImageFromUrl(thumbnail.Standard.Url);
+                return thumbnail.Standard.Url;
             if (thumbnail.High != null && thumbnail.High.Url != null)
-                return GetImageFromUrl(thumbnail.High.Url);
+                return thumbnail.High.Url;
             if (thumbnail.Medium != null && thumbnail.Medium.Url != null)
-                return GetImageFromUrl(thumbnail.Medium.Url);
+                return thumbnail.Medium.Url;
             if (thumbnail.Default__ != null && thumbnail.Default__.Url != null)
-                return GetImageFromUrl(thumbnail.Default__.Url);
-            return Properties.Resources.DefaultThumbnail;
+                return thumbnail.Default__.Url;
+            return null;
         }
     }
 }

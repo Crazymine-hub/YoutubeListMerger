@@ -10,7 +10,7 @@ namespace YoutubeListMerger.Classes
         public string Title { get; }
         public string Descrition { get; }
         public string Channel { get; }
-        public Image Thumbnail { get; }
+        public string ThumbnailUrl { get; }
         public DateTime PublishedAt { get; }
 
         public VideoInfo(PlaylistItem playlistItem)
@@ -20,7 +20,7 @@ namespace YoutubeListMerger.Classes
             Descrition = playlistItem.Snippet.Description;
             Channel = playlistItem.Snippet.VideoOwnerChannelTitle;
             PublishedAt = playlistItem.Snippet.PublishedAt ?? DateTime.MinValue;
-            Thumbnail = OnlineImage.GetBestResolution(playlistItem.Snippet.Thumbnails);
+            ThumbnailUrl = OnlineImage.GetBestResolution(playlistItem.Snippet.Thumbnails);
         }
     }
 }
