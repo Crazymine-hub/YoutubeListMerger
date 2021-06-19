@@ -31,7 +31,9 @@ namespace YoutubeListMerger.Classes
                 return GetImageFromUrl(thumbnail.High.Url);
             if (thumbnail.Medium != null && thumbnail.Medium.Url != null)
                 return GetImageFromUrl(thumbnail.Medium.Url);
-            return GetImageFromUrl(thumbnail.Default__.Url);
+            if (thumbnail.Default__ != null && thumbnail.Default__.Url != null)
+                return GetImageFromUrl(thumbnail.Default__.Url);
+            return Properties.Resources.DefaultThumbnail;
         }
     }
 }

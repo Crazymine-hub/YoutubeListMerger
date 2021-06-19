@@ -20,7 +20,7 @@ namespace YoutubeListMerger.Classes
             Descrition = playlistItem.Snippet.Description;
             Channel = playlistItem.Snippet.VideoOwnerChannelTitle;
             PublishedAt = playlistItem.Snippet.PublishedAt ?? DateTime.MinValue;
-            Thumbnail = OnlineImage.GetImageFromUrl(playlistItem.Snippet.Thumbnails.Maxres.Url);
+            Thumbnail = OnlineImage.GetBestResolution(playlistItem.Snippet.Thumbnails);
         }
     }
 }
