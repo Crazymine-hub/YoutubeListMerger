@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YoutubeListMerger.Classes;
@@ -17,8 +18,13 @@ namespace YoutubeListMerger
     public partial class MergerForm : Form
     {
         private YouTubeService youTube = new YouTubeService(new BaseClientService.Initializer() { ApiKey = File.ReadAllText("./API.key") });
-        public List<PlaylistAnalyzer> Playlists { get; private set; }
-        public Random random = new Random();
+        private PlaylistAnalyzer videoPlaylist;
+        private Stack<Task> scheduledAnalyzes = new Stack<Task>();
+        private List<Task> activeAnalyzes = new List<Task>();
+        private const int veryMaxConcurrentAnalyzes = 10;
+        private int MaxConcurrentAnalyzes => Properties.Settings.Default.MaxConcurrentAnalyzes > veryMaxConcurrentAnalyzes ?
+            veryMaxConcurrentAnalyzes :
+            Properties.Settings.Default.MaxConcurrentAnalyzes;
 
         public MergerForm()
         {
@@ -47,6 +53,8 @@ namespace YoutubeListMerger
             RectangleF unusedBar = new RectangleF(e.Bounds.X + bar.Width, e.Bounds.Y + 1, e.Bounds.Width - bar.Width, e.Bounds.Height - 2);
             if (playlist.Progress < 1)
                 e.Graphics.FillRectangle(Brushes.Green, bar);
+            else
+                e.Graphics.FillRectangle(Brushes.DarkGreen, bar);
             if (!e.State.HasFlag(DrawItemState.Selected) && playlist.Progress < 1)
                 e.Graphics.FillRectangle(Brushes.LightGray, unusedBar);
 
@@ -86,6 +94,135 @@ namespace YoutubeListMerger
 
             foreach (var vid in playlist.VideoList)
                 videoInfoBindingSource.Add(vid);
+        }
+
+        private void AddEntryBtn_Click(object sender, EventArgs e)
+        {
+            UrlErrorProvider.Clear();
+            try
+            {
+                string inputUrl = YouTubeUrlInput.Text;
+                if (!inputUrl.StartsWith("http"))
+                    inputUrl = "https://" + inputUrl;
+                Uri uri = new Uri(inputUrl);
+                if (uri.Host == "youtu.be")
+                {
+                    AddVideo(uri.AbsolutePath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+                    return;
+                }
+
+                if (!Regex.IsMatch(uri.Host, @"(?:www.)?youtube.com")) throw new ArgumentException("Not a YouTube URL.");
+
+                var paras = uri.Query.TrimStart('?').Split('&').Select(x => x.Split('=')).ToList();
+                bool QueryAdd(string parameterName, Action<string> successAction, bool throwOnFail = true)
+                {
+                    string[] para = paras.SingleOrDefault(x => x[0] == parameterName);
+                    if (para != null)
+                    {
+                        successAction(para[1]);
+                        return true;
+                    }
+                    else
+                        if (throwOnFail) throw new ArgumentException("No  Valid Parameter found");
+                    return false;
+                }
+
+                var path = uri.AbsolutePath.Trim('/').Split('/');
+                switch (path[0])
+                {
+                    case "watch":
+                        if (!QueryAdd("lidt", AddPlaylist, false)) QueryAdd("v", AddVideo);
+                        break;
+
+                    case "playlist":
+                        QueryAdd("list", AddPlaylist);
+                        break;
+                    case "channel":
+                        AddChannel(path[1]);
+                        break;
+                    case "user":
+                        var cAnalyzer = new ChannelAnalyzer(uri);
+                        cAnalyzer.ShowDialog();
+                        AddChannel(cAnalyzer.ChannelId);
+                        break;
+                    case "c":
+                        cAnalyzer = new ChannelAnalyzer(uri);
+                        cAnalyzer.ShowDialog();
+                        AddChannel(cAnalyzer.ChannelId);
+                        break;
+
+                    default: throw new ArgumentException("Not a known YouTube Page");
+                }
+            }
+            catch (DuplicateListException)
+            {
+                UrlErrorProvider.Icon = Properties.Resources.Warning;
+                UrlErrorProvider.SetError(UrlEnterLabel, "This Entry already Exists");
+            }
+            catch
+            {
+                UrlErrorProvider.Icon = Properties.Resources.Error;
+                UrlErrorProvider.SetError(UrlEnterLabel, "This is not a valid YouTube URL");
+            }
+            finally
+            {
+                if (string.IsNullOrWhiteSpace(UrlErrorProvider.GetError(UrlEnterLabel)))
+                    YouTubeUrlInput.Clear();
+            }
+        }
+
+        private void AddEntryBtn_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) AddEntryBtn.PerformClick();
+        }
+
+        private void AddVideo(string videoId)
+        {
+            if (videoPlaylist == null)
+            {
+                videoPlaylist = new PlaylistAnalyzer("<Your Videos>", "<Contains Videos, you added manually.>", youTube);
+                playlistAnalyzerBindingSource.Add(videoPlaylist);
+            }
+            if (VideoInfo.VideoExists(videoId)) throw new DuplicateListException();
+            videoPlaylist.AddVideo(videoId);
+        }
+
+        private void AddPlaylist(string listId)
+        {
+            if (playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>().FirstOrDefault(x => x.ID == listId) != null)
+                throw new DuplicateListException();
+            PlaylistAnalyzer analyzer = new PlaylistAnalyzer(listId, false, youTube, PlaylistList.Invalidate, TaskFinished);
+            playlistAnalyzerBindingSource.Add(analyzer);
+            scheduledAnalyzes.Push(analyzer.WorkerTask);
+            StartNextAnalyze();
+        }
+
+        private void AddChannel(string channelId)
+        {
+            if (playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>().FirstOrDefault(x => x.ID == channelId) != null)
+                throw new DuplicateListException();
+            PlaylistAnalyzer analyzer = new PlaylistAnalyzer(channelId, true, youTube, PlaylistList.Invalidate, TaskFinished);
+            playlistAnalyzerBindingSource.Add(analyzer);
+            scheduledAnalyzes.Push(analyzer.WorkerTask);
+            StartNextAnalyze();
+        }
+
+        private void StartNextAnalyze()
+        {
+            if(activeAnalyzes.Count < MaxConcurrentAnalyzes && scheduledAnalyzes.Count > 0)
+            {
+                Task nextTask = scheduledAnalyzes.Pop();
+                activeAnalyzes.Add(nextTask);
+                nextTask.Start();
+            }
+        }
+
+        private void TaskFinished(object sender, EventArgs e)
+        {
+            PlaylistAnalyzer finished = (PlaylistAnalyzer)sender;
+            activeAnalyzes.Remove(finished.WorkerTask);
+            StartNextAnalyze();
+            PlaylistList_SelectedIndexChanged(sender, e);
         }
     }
 }

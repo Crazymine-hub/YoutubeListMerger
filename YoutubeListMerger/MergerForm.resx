@@ -123,4 +123,33 @@
   <metadata name="videoInfoBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>232, 17</value>
   </metadata>
+  <metadata name="UrlErrorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>414, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="UrlErrorProvider.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBEAAAEAIACsBAAAFgAAACgAAAAQAAAAIgAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAA////AP///wD///8A////AAAA/z8AAP+WAAD/1gAA//kAAP/5AAD/1gAA/5YAAP8/////AP//
+        /wD///8A////AP///wD///8AAAD/GgAA/5MAAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        /5MAAP8a////AP///wD///8AAAD/GgAA/6cAAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD/pwAA/xr///8A////AAAA/5MAAP//AAD//wAA//8AAP//AAD///Pz//+8vP//AAD//wAA
+        //8AAP//AAD//wAA//8AAP+T////AAAA/z8AAP//AAD//wAA//8AAP//AAD//wAA///z8///vLz//wAA
+        //8AAP//AAD//wAA//8AAP//AAD//wAA/z8AAP+WAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP+WAAD/1gAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD/1gAA//kAAP//AAD//wAA//8AAP//AAD//wAA
+        ///m5v//qKj//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//kAAP/5AAD//wAA//8AAP//AAD//wAA
+        //8AAP//7u7//7S0//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP/5AAD/1gAA//8AAP//AAD//wAA
+        //8AAP//AAD///Ly//+7u///AAD//wAA//8AAP//AAD//wAA//8AAP//AAD/1gAA/5YAAP//AAD//wAA
+        //8AAP//AAD//wAA///z8///vLz//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA/5YAAP8/AAD//wAA
+        //8AAP//AAD//wAA//8AAP//8/P//7y8//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP8/////AAAA
+        /5MAAP//AAD//wAA//8AAP//AAD///Pz//+8vP//AAD//wAA//8AAP//AAD//wAA//8AAP+T////AP//
+        /wAAAP8aAAD/pwAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP+nAAD/Gv//
+        /wD///8A////AAAA/xoAAP+TAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP+TAAD/Gv//
+        /wD///8A////AP///wD///8A////AAAA/z8AAP+WAAD/1gAA//kAAP/5AAD/1gAA/5YAAP8/////AP//
+        /wD///8A////AP//AADwDwAAwAMAAIABAACAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AACAAQAAgAEAAMADAADwDwAA
+</value>
+  </data>
 </root>

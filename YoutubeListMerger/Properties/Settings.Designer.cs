@@ -35,6 +35,18 @@ namespace YoutubeListMerger.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int MaxConcurrentAnalyzes {
+            get {
+                return ((int)(this["MaxConcurrentAnalyzes"]));
+            }
+            set {
+                this["MaxConcurrentAnalyzes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("500")]
         public int AnalyzeDelay {
             get {

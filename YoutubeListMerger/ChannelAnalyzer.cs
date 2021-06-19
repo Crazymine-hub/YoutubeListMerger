@@ -17,7 +17,7 @@ namespace YoutubeListMerger
     {
         public string ChannelId { get; internal set; }
         private Uri channelUri;
-        public ChannelAnalyzer(Uri ytChannelUri)
+        internal ChannelAnalyzer(Uri ytChannelUri)
         {
             InitializeComponent();
             Load += ChannelAnalyzer_Load;
