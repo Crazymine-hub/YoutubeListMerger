@@ -13,27 +13,32 @@ namespace YoutubeListMerger.Classes
     {
         public static Image GetImageFromUrl(string url)
         {
-            WebRequest request = WebRequest.Create(url);
-            using (var response = request.GetResponse())
+            if (string.IsNullOrWhiteSpace(url))
+                return Properties.Resources.DefaultThumbnail;
+            HttpWebRequest request = WebRequest.CreateHttp(url);
+            request.AllowAutoRedirect = true;
+            using (var response = (HttpWebResponse)request.GetResponse())
             {
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Properties.Resources.DefaultThumbnail;
                 using (var content = response.GetResponseStream())
                     return Image.FromStream(content);
             }
         }
 
-        public static string GetBestResolution(YT.ThumbnailDetails thumbnail)
+        public static Image GetBestResolution(YT.ThumbnailDetails thumbnail)
         {
             if (thumbnail.Maxres != null && thumbnail.Maxres.Url != null)
-                return thumbnail.Maxres.Url;
+                try { return GetImageFromUrl(thumbnail.Maxres.Url); } catch { }
             if (thumbnail.Standard != null && thumbnail.Standard.Url != null)
-                return thumbnail.Standard.Url;
+                try { return GetImageFromUrl(thumbnail.Standard.Url); } catch { }
             if (thumbnail.High != null && thumbnail.High.Url != null)
-                return thumbnail.High.Url;
+                try { return GetImageFromUrl(thumbnail.High.Url); } catch { }
             if (thumbnail.Medium != null && thumbnail.Medium.Url != null)
-                return thumbnail.Medium.Url;
+                try { return GetImageFromUrl(thumbnail.Medium.Url); } catch { }
             if (thumbnail.Default__ != null && thumbnail.Default__.Url != null)
-                return thumbnail.Default__.Url;
-            return null;
+                try { return GetImageFromUrl(thumbnail.Default__.Url); } catch { }
+            return Properties.Resources.DefaultThumbnail;
         }
     }
 }

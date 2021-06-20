@@ -23,16 +23,6 @@ namespace YoutubeListMerger.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://www.youtube.com\r\nhttps://youtu.be\r\nhttps://youtbe.com\r\nwww.youtbe.com\r\nyo" +
-            "utu.be\r\nyoutube.com")]
-        public string ValidYouTubeUrls {
-            get {
-                return ((string)(this["ValidYouTubeUrls"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
@@ -66,6 +56,42 @@ namespace YoutubeListMerger.Properties {
             }
             set {
                 this["AnalyzePauseInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.youtube.com/")]
+        public string YouTubeDefaultUrl {
+            get {
+                return ((string)(this["YouTubeDefaultUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("channel/")]
+        public string YouTubeChannelPath {
+            get {
+                return ((string)(this["YouTubeChannelPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("watch?v=")]
+        public string YouTubeVideoPath {
+            get {
+                return ((string)(this["YouTubeVideoPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("playlist?list=")]
+        public string YouTubePlaylistPath {
+            get {
+                return ((string)(this["YouTubePlaylistPath"]));
             }
         }
     }

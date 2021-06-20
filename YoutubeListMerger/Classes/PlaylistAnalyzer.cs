@@ -8,7 +8,7 @@ using YT = Google.Apis.YouTube.v3;
 
 namespace YoutubeListMerger.Classes
 {
-    public class PlaylistAnalyzer: YoutubeItemDetail
+    public class PlaylistAnalyzer : YoutubeItemDetail
     {
         public delegate void SimpleCallback();
 
@@ -20,10 +20,15 @@ namespace YoutubeListMerger.Classes
         public string Title { get; private set; } = "<To be analyzed>";
         public string Description { get; private set; } = "<This Playlist hasn't been analyzed yet>";
         public DateTime PublishDate { get; private set; } = DateTime.Now;
-        public string ThumbnailUrl { get; private set; }
+        public YT.Data.ThumbnailDetails Thumbnails { get; private set; }
         public string Channel { get; private set; } = "<Youtube PlaylistMerger>";
         public int InaccessibleVideoCount { get; private set; }
-        public string ChannelUploadPlaylistID { get; private set; }
+        public Image Thumbnail { get; set; }
+
+        public string ChannelId { get; private set; }
+        public string ItemId { get; private set; }
+        public bool IsVideo => false;
+        public int ItemCount => videoList.Count;
 
         public IReadOnlyList<VideoInfo> VideoList => videoList.AsReadOnly();
         public long TotalVideos { get; private set; }
@@ -80,7 +85,10 @@ namespace YoutubeListMerger.Classes
             Description = listDetails.Snippet.Description;
             PublishDate = listDetails.Snippet.PublishedAt ?? DateTime.Now;
             TotalVideos = listDetails.ContentDetails.ItemCount ?? 0;
-            ThumbnailUrl = OnlineImage.GetBestResolution(listDetails.Snippet.Thumbnails);
+            Thumbnails = listDetails.Snippet.Thumbnails;
+            ChannelId = listDetails.Snippet.ChannelId;
+            ItemId = ID;
+            Channel = listDetails.Snippet.ChannelTitle;
 
             ListPlaylistItems(ID);
         }
@@ -95,10 +103,12 @@ namespace YoutubeListMerger.Classes
             Title = channelDetails.Snippet.Title;
             Description = channelDetails.Snippet.Description;
             PublishDate = channelDetails.Snippet.PublishedAt ?? DateTime.Now;
-            ThumbnailUrl = OnlineImage.GetBestResolution(channelDetails.Snippet.Thumbnails);
-            ChannelUploadPlaylistID = channelDetails.ContentDetails.RelatedPlaylists.Uploads;
+            Thumbnails = channelDetails.Snippet.Thumbnails;
+            ItemId = channelDetails.ContentDetails.RelatedPlaylists.Uploads;
+            ChannelId = ID;
+            Channel = channelDetails.Snippet.Title;
 
-            ListPlaylistItems(ChannelUploadPlaylistID);
+            ListPlaylistItems(ItemId);
         }
 
         private void ListPlaylistItems(string id)

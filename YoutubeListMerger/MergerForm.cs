@@ -88,12 +88,19 @@ namespace YoutubeListMerger
             }
             videoInfoBindingSource.Clear();
             var playlist = (PlaylistAnalyzer)PlaylistList.SelectedItem;
-            if (playlist == null || !playlist.IsCustom && !playlist.WorkerTask.IsCompleted)
+            ListPreview.UpdateDisplay(playlist);
+            if (playlist == null || !playlist.IsCustom && playlist.Progress < 1)
                 return;
 
 
             foreach (var vid in playlist.VideoList)
                 videoInfoBindingSource.Add(vid);
+        }
+
+        private void VideoList_SelectedValueChanged(object sender, EventArgs e)
+        {
+            var video = (VideoInfo)VideoList.SelectedItem;
+            VideoPreview.UpdateDisplay(video);
         }
 
         private void AddEntryBtn_Click(object sender, EventArgs e)
@@ -224,5 +231,11 @@ namespace YoutubeListMerger
             StartNextAnalyze();
             PlaylistList_SelectedIndexChanged(sender, e);
         }
+
+        private void YouTubeUrlInput_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) AddEntryBtn.PerformClick();
+        }
+
     }
 }

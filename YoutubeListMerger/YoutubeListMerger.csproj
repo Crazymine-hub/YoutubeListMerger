@@ -81,6 +81,12 @@
     <Compile Include="Classes\OnlineImage.cs" />
     <Compile Include="Classes\PlaylistAnalyzer.cs" />
     <Compile Include="Classes\YoutubeItemDetail.cs" />
+    <Compile Include="ItemPreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ItemPreview.Designer.cs">
+      <DependentUpon>ItemPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +99,9 @@
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="ChannelAnalyzer.resx">
       <DependentUpon>ChannelAnalyzer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemPreview.resx">
+      <DependentUpon>ItemPreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MergerForm.resx">
       <DependentUpon>MergerForm.cs</DependentUpon>

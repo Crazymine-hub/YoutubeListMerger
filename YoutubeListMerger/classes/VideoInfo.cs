@@ -15,8 +15,14 @@ namespace YoutubeListMerger.Classes
         public string Title { get; }
         public string Description { get; }
         public string Channel { get; }
-        public string ThumbnailUrl { get; }
+        public ThumbnailDetails Thumbnails { get; }
         public DateTime PublishDate { get; }
+        public Image Thumbnail { get; set; }
+
+        public string ChannelId { get; private set; }
+        public string ItemId => ID;
+        public bool IsVideo => true;
+        public int ItemCount => 0;
 
         private VideoInfo(PlaylistItem playlistItem)
         {
@@ -25,7 +31,8 @@ namespace YoutubeListMerger.Classes
             Description = playlistItem.Snippet.Description;
             Channel = playlistItem.Snippet.VideoOwnerChannelTitle;
             PublishDate = playlistItem.Snippet.PublishedAt ?? DateTime.MinValue;
-            ThumbnailUrl = OnlineImage.GetBestResolution(playlistItem.Snippet.Thumbnails);
+            Thumbnails = playlistItem.Snippet.Thumbnails;
+            ChannelId = playlistItem.Snippet.VideoOwnerChannelId;
         }
 
         private VideoInfo(Video video)
@@ -35,7 +42,8 @@ namespace YoutubeListMerger.Classes
             Description = video.Snippet.Description;
             Channel = video.Snippet.ChannelTitle;
             PublishDate = video.Snippet.PublishedAt ?? DateTime.MinValue;
-            ThumbnailUrl = OnlineImage.GetBestResolution(video.Snippet.Thumbnails);
+            Thumbnails = video.Snippet.Thumbnails;
+            ChannelId = video.Snippet.ChannelId;
         }
 
         public static bool VideoExists(string videoId)
