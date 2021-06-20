@@ -47,6 +47,9 @@ namespace YoutubeListMerger
             this.UrlEnterLabel = new System.Windows.Forms.Label();
             this.UrlErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.BatchFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.FooterPanel = new System.Windows.Forms.Panel();
+            this.MergeButton = new System.Windows.Forms.Button();
+            this.ResetButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Workspace)).BeginInit();
             this.Workspace.Panel1.SuspendLayout();
             this.Workspace.Panel2.SuspendLayout();
@@ -55,6 +58,7 @@ namespace YoutubeListMerger
             ((System.ComponentModel.ISupportInitialize)(this.videoInfoBindingSource)).BeginInit();
             this.AddressSpace.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UrlErrorProvider)).BeginInit();
+            this.FooterPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // Workspace
@@ -236,11 +240,46 @@ namespace YoutubeListMerger
             this.BatchFileDialog.DefaultExt = "txt";
             this.BatchFileDialog.Filter = "Textdateien|*.txt";
             // 
+            // FooterPanel
+            // 
+            this.FooterPanel.Controls.Add(this.ResetButton);
+            this.FooterPanel.Controls.Add(this.MergeButton);
+            this.FooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.FooterPanel.Location = new System.Drawing.Point(0, 432);
+            this.FooterPanel.Name = "FooterPanel";
+            this.FooterPanel.Size = new System.Drawing.Size(584, 29);
+            this.FooterPanel.TabIndex = 6;
+            // 
+            // MergeButton
+            // 
+            this.MergeButton.AutoSize = true;
+            this.MergeButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.MergeButton.Location = new System.Drawing.Point(502, 0);
+            this.MergeButton.Name = "MergeButton";
+            this.MergeButton.Size = new System.Drawing.Size(82, 29);
+            this.MergeButton.TabIndex = 0;
+            this.MergeButton.Text = "Merge Videos";
+            this.MergeButton.UseVisualStyleBackColor = true;
+            this.MergeButton.Click += new System.EventHandler(this.MergeButton_Click);
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.AutoSize = true;
+            this.ResetButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ResetButton.Location = new System.Drawing.Point(420, 0);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(82, 29);
+            this.ResetButton.TabIndex = 1;
+            this.ResetButton.Text = "Reset";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            // 
             // MergerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 461);
+            this.Controls.Add(this.FooterPanel);
             this.Controls.Add(this.Workspace);
             this.Controls.Add(this.AddressSpace);
             this.MinimumSize = new System.Drawing.Size(600, 500);
@@ -256,6 +295,8 @@ namespace YoutubeListMerger
             this.AddressSpace.ResumeLayout(false);
             this.AddressSpace.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UrlErrorProvider)).EndInit();
+            this.FooterPanel.ResumeLayout(false);
+            this.FooterPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -278,6 +319,9 @@ namespace YoutubeListMerger
         private ItemPreview VideoPreview;
         private System.Windows.Forms.Button AddEntryBtn;
         private System.Windows.Forms.OpenFileDialog BatchFileDialog;
+        private System.Windows.Forms.Panel FooterPanel;
+        private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.Button MergeButton;
     }
 }
 

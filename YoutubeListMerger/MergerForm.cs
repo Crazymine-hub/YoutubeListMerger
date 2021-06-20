@@ -297,5 +297,16 @@ namespace YoutubeListMerger
             videoPlaylist.RemoveVideo(video);
             PlaylistList_SelectedIndexChanged(sender, e);
         }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void MergeButton_Click(object sender, EventArgs e)
+        {
+            if (scheduledAnalyzes.Count + activeAnalyzes.Count > 0) return;
+
+        }
     }
 }

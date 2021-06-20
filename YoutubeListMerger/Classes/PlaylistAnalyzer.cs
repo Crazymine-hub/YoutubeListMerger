@@ -138,14 +138,14 @@ namespace YoutubeListMerger.Classes
                 }
                 redrawCallback?.Invoke();
                 waitTask.Wait();
-                if (tokenSource.IsCancellationRequested) return;
+                if (tokenSource.Token.IsCancellationRequested) return;
             } while (listQuery.PageToken != null);
         }
 
         public override string ToString()
         {
             string result = Title;
-            if (WorkerTask.IsCompleted)
+            if (WorkerTask?.IsCompleted ?? true)
             {
                 if (!IsCustom)
                     result += " ✔DONE";
