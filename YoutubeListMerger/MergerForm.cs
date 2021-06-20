@@ -92,6 +92,7 @@ namespace YoutubeListMerger
             if (playlist == null || !playlist.IsCustom && playlist.Progress < 1)
                 return;
 
+            VideoPreview.AllowVideoRemove = playlist == videoPlaylist;
 
             foreach (var vid in playlist.VideoList)
                 videoInfoBindingSource.Add(vid);
@@ -108,58 +109,7 @@ namespace YoutubeListMerger
             UrlErrorProvider.Clear();
             try
             {
-                string inputUrl = YouTubeUrlInput.Text;
-                if (!inputUrl.StartsWith("http"))
-                    inputUrl = "https://" + inputUrl;
-                Uri uri = new Uri(inputUrl);
-                if (uri.Host == "youtu.be")
-                {
-                    AddVideo(uri.AbsolutePath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0]);
-                    return;
-                }
-
-                if (!Regex.IsMatch(uri.Host, @"(?:www.)?youtube.com")) throw new ArgumentException("Not a YouTube URL.");
-
-                var paras = uri.Query.TrimStart('?').Split('&').Select(x => x.Split('=')).ToList();
-                bool QueryAdd(string parameterName, Action<string> successAction, bool throwOnFail = true)
-                {
-                    string[] para = paras.SingleOrDefault(x => x[0] == parameterName);
-                    if (para != null)
-                    {
-                        successAction(para[1]);
-                        return true;
-                    }
-                    else
-                        if (throwOnFail) throw new ArgumentException("No  Valid Parameter found");
-                    return false;
-                }
-
-                var path = uri.AbsolutePath.Trim('/').Split('/');
-                switch (path[0])
-                {
-                    case "watch":
-                        if (!QueryAdd("lidt", AddPlaylist, false)) QueryAdd("v", AddVideo);
-                        break;
-
-                    case "playlist":
-                        QueryAdd("list", AddPlaylist);
-                        break;
-                    case "channel":
-                        AddChannel(path[1]);
-                        break;
-                    case "user":
-                        var cAnalyzer = new ChannelAnalyzer(uri);
-                        cAnalyzer.ShowDialog();
-                        AddChannel(cAnalyzer.ChannelId);
-                        break;
-                    case "c":
-                        cAnalyzer = new ChannelAnalyzer(uri);
-                        cAnalyzer.ShowDialog();
-                        AddChannel(cAnalyzer.ChannelId);
-                        break;
-
-                    default: throw new ArgumentException("Not a known YouTube Page");
-                }
+                ProcessUrl(YouTubeUrlInput.Text);
             }
             catch (DuplicateListException)
             {
@@ -178,9 +128,64 @@ namespace YoutubeListMerger
             }
         }
 
+        private void ProcessUrl(string inputUrl)
+        {
+            if (!inputUrl.StartsWith("http"))
+                inputUrl = "https://" + inputUrl;
+            Uri uri = new Uri(inputUrl);
+            if (uri.Host == "youtu.be")
+            {
+                AddVideo(uri.AbsolutePath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0]);
+                return;
+            }
+
+            if (!Regex.IsMatch(uri.Host, @"(?:www.)?youtube.com")) throw new ArgumentException("Not a YouTube URL.");
+
+            var paras = uri.Query.TrimStart('?').Split('&').Select(x => x.Split('=')).ToList();
+            bool QueryAdd(string parameterName, Action<string> successAction, bool throwOnFail = true)
+            {
+                string[] para = paras.SingleOrDefault(x => x[0] == parameterName);
+                if (para != null)
+                {
+                    successAction(para[1]);
+                    return true;
+                }
+                else
+                    if (throwOnFail) throw new ArgumentException("No  Valid Parameter found");
+                return false;
+            }
+
+            var path = uri.AbsolutePath.Trim('/').Split('/');
+            switch (path[0])
+            {
+                case "watch":
+                    if (!QueryAdd("list", AddPlaylist, false)) QueryAdd("v", AddVideo);
+                    break;
+
+                case "playlist":
+                    QueryAdd("list", AddPlaylist);
+                    break;
+                case "channel":
+                    AddChannel(path[1]);
+                    break;
+                case "user":
+                    var cAnalyzer = new ChannelAnalyzer(uri);
+                    cAnalyzer.ShowDialog();
+                    AddChannel(cAnalyzer.ChannelId);
+                    break;
+                case "c":
+                    cAnalyzer = new ChannelAnalyzer(uri);
+                    cAnalyzer.ShowDialog();
+                    AddChannel(cAnalyzer.ChannelId);
+                    break;
+
+                default: throw new ArgumentException("Not a known YouTube Page");
+            }
+        }
+
         private void AddEntryBtn_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) AddEntryBtn.PerformClick();
+            if (e.KeyCode == Keys.Enter) OpenBatchButton.PerformClick();
         }
 
         private void AddVideo(string videoId)
@@ -216,7 +221,7 @@ namespace YoutubeListMerger
 
         private void StartNextAnalyze()
         {
-            if(activeAnalyzes.Count < MaxConcurrentAnalyzes && scheduledAnalyzes.Count > 0)
+            if (activeAnalyzes.Count < MaxConcurrentAnalyzes && scheduledAnalyzes.Count > 0)
             {
                 Task nextTask = scheduledAnalyzes.Pop();
                 activeAnalyzes.Add(nextTask);
@@ -237,5 +242,60 @@ namespace YoutubeListMerger
             if (e.KeyCode == Keys.Enter) AddEntryBtn.PerformClick();
         }
 
+        private void OpenBatchButton_Click(object sender, EventArgs e)
+        {
+            UseWaitCursor = true;
+            Enabled = false;
+            if (BatchFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                StringBuilder errorLines = new StringBuilder("The Following URLs could not be processed:");
+                errorLines.AppendLine();
+                errorLines.AppendLine();
+                bool hasError = false;
+                int duplicateCount = 0;
+                StreamReader reader = new StreamReader(BatchFileDialog.OpenFile());
+                while (!reader.EndOfStream)
+                {
+                    string url = reader.ReadLine();
+                    try
+                    {
+                        ProcessUrl(url);
+                    }
+                    catch (DuplicateListException)
+                    {
+                        //Ignore them, they are already being processed.
+                        ++duplicateCount;
+                    }
+                    catch
+                    {
+                        hasError = true;
+                        errorLines.AppendLine(url);
+                    }
+                }
+                if (hasError)
+                    MessageBox.Show(errorLines.ToString(), "Invalid URLs skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if(duplicateCount > 0)
+                    MessageBox.Show($"Skipped {duplicateCount} duplicate(s).", "Duplicates skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            UseWaitCursor = false;
+            Enabled = true;
+        }
+
+        private void ListPreview_RemoveButtonClicked(object sender, EventArgs e)
+        {
+            PlaylistAnalyzer analyzer = (PlaylistAnalyzer)PlaylistList.SelectedItem;
+            playlistAnalyzerBindingSource.Remove(analyzer);
+            analyzer.Dispose();
+            analyzer = null;
+            PlaylistList_SelectedIndexChanged(sender, e);
+        }
+
+        private void VideoPreview_RemoveButtonClicked(object sender, EventArgs e)
+        {
+            if (PlaylistList.SelectedItem != videoPlaylist) return;
+            VideoInfo video = (VideoInfo)VideoList.SelectedItem;
+            videoPlaylist.RemoveVideo(video);
+            PlaylistList_SelectedIndexChanged(sender, e);
+        }
     }
 }

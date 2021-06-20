@@ -15,6 +15,8 @@ namespace YoutubeListMerger
     {
         public event EventHandler RemoveButtonClicked;
         private YoutubeItemDetail item;
+        [DefaultValue(false)]
+        public bool AllowVideoRemove { get; set; }
         public ItemPreview()
         {
             InitializeComponent();
@@ -38,8 +40,10 @@ namespace YoutubeListMerger
                 Title.Text += $" ({item.ItemCount} Video(s))";
             ChannelName.Text = item.Channel + $" ({item.PublishDate:d})";
             Details.Text = item.Description;
-            RemoveButton.Visible = !item.IsVideo;
-            RemoveEntry.Enabled = !item.IsVideo;
+            RemoveButton.Visible = !item.IsVideo || AllowVideoRemove;
+            RemoveEntry.Enabled = !item.IsVideo || AllowVideoRemove;
+            OpenChannelEntry.Enabled = item.ChannelId != null;
+            OpenPlaylistEntry.Enabled = item.ItemId != null;
         }
 
         public void ResetDisplay()
@@ -55,7 +59,7 @@ namespace YoutubeListMerger
 
         private void ItemPreview_Click(object sender, EventArgs e)
         {
-            if (item == null) return;
+            if (item == null || item.ItemId == null) return;
             var settings = Properties.Settings.Default;
             System.Diagnostics.Process.Start(settings.YouTubeDefaultUrl + (item.IsVideo ? settings.YouTubeVideoPath : settings.YouTubePlaylistPath) + item.ItemId);
         }
@@ -67,6 +71,7 @@ namespace YoutubeListMerger
 
         private void OpenChannelEntry_Click(object sender, EventArgs e)
         {
+            if (item == null || item.ChannelId == null) return;
             var settings = Properties.Settings.Default;
             System.Diagnostics.Process.Start(settings.YouTubeDefaultUrl + settings.YouTubeChannelPath + item.ChannelId);
         }

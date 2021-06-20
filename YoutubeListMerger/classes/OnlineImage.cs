@@ -28,6 +28,7 @@ namespace YoutubeListMerger.Classes
 
         public static Image GetBestResolution(YT.ThumbnailDetails thumbnail)
         {
+            if(thumbnail == null) return Properties.Resources.DefaultThumbnail;
             if (thumbnail.Maxres != null && thumbnail.Maxres.Url != null)
                 try { return GetImageFromUrl(thumbnail.Maxres.Url); } catch { }
             if (thumbnail.Standard != null && thumbnail.Standard.Url != null)

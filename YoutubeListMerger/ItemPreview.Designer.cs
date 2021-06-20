@@ -97,6 +97,7 @@ namespace YoutubeListMerger
             this.RemoveButton.TabIndex = 7;
             this.RemoveButton.Text = "";
             this.RemoveButton.UseVisualStyleBackColor = true;
+            this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
             // Title
             // 

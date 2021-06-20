@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using YT = Google.Apis.YouTube.v3;
 
 namespace YoutubeListMerger.Classes
 {
-    public class PlaylistAnalyzer : YoutubeItemDetail
+    public class PlaylistAnalyzer : YoutubeItemDetail, IDisposable
     {
         public delegate void SimpleCallback();
 
@@ -47,6 +48,8 @@ namespace YoutubeListMerger.Classes
         }
         private SimpleCallback redrawCallback;
         private EventHandler finishedCallback;
+        private bool isDisposed = false;
+        CancellationTokenSource tokenSource = new CancellationTokenSource();
 
         public PlaylistAnalyzer(string customTitle, string customDecription, YT.YouTubeService youTubeService)
         {
@@ -62,7 +65,7 @@ namespace YoutubeListMerger.Classes
             ID = id;
             IsChannelPlaylist = isChannel;
             youTube = youTubeService;
-            WorkerTask = new Task(ListVideos);
+            WorkerTask = new Task(ListVideos, tokenSource.Token);
             redrawCallback = redraw;
             finishedCallback = finished;
         }
@@ -135,6 +138,7 @@ namespace YoutubeListMerger.Classes
                 }
                 redrawCallback?.Invoke();
                 waitTask.Wait();
+                if (tokenSource.IsCancellationRequested) return;
             } while (listQuery.PageToken != null);
         }
 
@@ -163,6 +167,24 @@ namespace YoutubeListMerger.Classes
         {
             if (!IsCustom) throw new InvalidOperationException("Only custom Playlists can be modified");
             videoList.Remove(videoInfo);
+        }
+
+        public void Dispose()
+        {
+            tokenSource.Cancel();
+            youTube = null;
+            Thumbnails = null;
+            Thumbnail?.Dispose();
+            Thumbnail = null;
+            WorkerTask = null;
+            foreach (VideoInfo video in videoList)
+                VideoInfo.DereferenceVideo(video);
+            isDisposed = true;
+        }
+
+        ~PlaylistAnalyzer()
+        {
+            if(!isDisposed) Dispose();
         }
     }
 }

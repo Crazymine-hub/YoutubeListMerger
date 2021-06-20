@@ -41,10 +41,12 @@ namespace YoutubeListMerger
             this.VideoPreview = new YoutubeListMerger.ItemPreview();
             this.VideoListLabel = new System.Windows.Forms.Label();
             this.AddressSpace = new System.Windows.Forms.Panel();
+            this.AddEntryBtn = new System.Windows.Forms.Button();
             this.YouTubeUrlInput = new System.Windows.Forms.TextBox();
+            this.OpenBatchButton = new System.Windows.Forms.Button();
             this.UrlEnterLabel = new System.Windows.Forms.Label();
             this.UrlErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.AddEntryBtn = new System.Windows.Forms.Button();
+            this.BatchFileDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.Workspace)).BeginInit();
             this.Workspace.Panel1.SuspendLayout();
             this.Workspace.Panel2.SuspendLayout();
@@ -121,6 +123,7 @@ namespace YoutubeListMerger
             this.ListPreview.Name = "ListPreview";
             this.ListPreview.Size = new System.Drawing.Size(272, 80);
             this.ListPreview.TabIndex = 3;
+            this.ListPreview.RemoveButtonClicked += new System.EventHandler(this.ListPreview_RemoveButtonClicked);
             // 
             // VideoList
             // 
@@ -148,6 +151,7 @@ namespace YoutubeListMerger
             this.VideoPreview.Name = "VideoPreview";
             this.VideoPreview.Size = new System.Drawing.Size(262, 80);
             this.VideoPreview.TabIndex = 4;
+            this.VideoPreview.RemoveButtonClicked += new System.EventHandler(this.VideoPreview_RemoveButtonClicked);
             // 
             // VideoListLabel
             // 
@@ -164,6 +168,7 @@ namespace YoutubeListMerger
             // 
             this.AddressSpace.Controls.Add(this.AddEntryBtn);
             this.AddressSpace.Controls.Add(this.YouTubeUrlInput);
+            this.AddressSpace.Controls.Add(this.OpenBatchButton);
             this.AddressSpace.Controls.Add(this.UrlEnterLabel);
             this.AddressSpace.Dock = System.Windows.Forms.DockStyle.Top;
             this.AddressSpace.Location = new System.Drawing.Point(0, 0);
@@ -171,28 +176,44 @@ namespace YoutubeListMerger
             this.AddressSpace.Size = new System.Drawing.Size(584, 37);
             this.AddressSpace.TabIndex = 5;
             // 
-            // YouTubeUrlInput
-            // 
-            this.YouTubeUrlInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.YouTubeUrlInput.Location = new System.Drawing.Point(0, 16);
-            this.YouTubeUrlInput.Name = "YouTubeUrlInput";
-            this.YouTubeUrlInput.Size = new System.Drawing.Size(548, 20);
-            this.YouTubeUrlInput.TabIndex = 1;
-            this.YouTubeUrlInput.WordWrap = false;
-            // 
             // AddEntryBtn
             // 
             this.AddEntryBtn.AutoSize = true;
             this.AddEntryBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.AddEntryBtn.Dock = System.Windows.Forms.DockStyle.Right;
-            this.AddEntryBtn.Location = new System.Drawing.Point(548, 16);
+            this.AddEntryBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddEntryBtn.Location = new System.Drawing.Point(532, 16);
             this.AddEntryBtn.Name = "AddEntryBtn";
-            this.AddEntryBtn.Size = new System.Drawing.Size(36, 21);
-            this.AddEntryBtn.TabIndex = 2;
-            this.AddEntryBtn.Text = "&Add";
+            this.AddEntryBtn.Size = new System.Drawing.Size(26, 21);
+            this.AddEntryBtn.TabIndex = 3;
+            this.AddEntryBtn.Text = "";
             this.AddEntryBtn.UseVisualStyleBackColor = true;
             this.AddEntryBtn.Click += new System.EventHandler(this.AddEntryBtn_Click);
-            this.AddEntryBtn.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AddEntryBtn_PreviewKeyDown);
+            // 
+            // YouTubeUrlInput
+            // 
+            this.YouTubeUrlInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.YouTubeUrlInput.Location = new System.Drawing.Point(0, 16);
+            this.YouTubeUrlInput.Name = "YouTubeUrlInput";
+            this.YouTubeUrlInput.Size = new System.Drawing.Size(558, 20);
+            this.YouTubeUrlInput.TabIndex = 1;
+            this.YouTubeUrlInput.WordWrap = false;
+            this.YouTubeUrlInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.YouTubeUrlInput_PreviewKeyDown);
+            // 
+            // OpenBatchButton
+            // 
+            this.OpenBatchButton.AutoSize = true;
+            this.OpenBatchButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.OpenBatchButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.OpenBatchButton.Font = new System.Drawing.Font("Segoe MDL2 Assets", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenBatchButton.Location = new System.Drawing.Point(558, 16);
+            this.OpenBatchButton.Name = "OpenBatchButton";
+            this.OpenBatchButton.Size = new System.Drawing.Size(26, 21);
+            this.OpenBatchButton.TabIndex = 2;
+            this.OpenBatchButton.Text = "";
+            this.OpenBatchButton.UseVisualStyleBackColor = true;
+            this.OpenBatchButton.Click += new System.EventHandler(this.OpenBatchButton_Click);
+            this.OpenBatchButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AddEntryBtn_PreviewKeyDown);
             // 
             // UrlEnterLabel
             // 
@@ -209,6 +230,11 @@ namespace YoutubeListMerger
             // 
             this.UrlErrorProvider.ContainerControl = this;
             this.UrlErrorProvider.Icon = ((System.Drawing.Icon)(resources.GetObject("UrlErrorProvider.Icon")));
+            // 
+            // BatchFileDialog
+            // 
+            this.BatchFileDialog.DefaultExt = "txt";
+            this.BatchFileDialog.Filter = "Textdateien|*.txt";
             // 
             // MergerForm
             // 
@@ -245,7 +271,7 @@ namespace YoutubeListMerger
         private System.Windows.Forms.BindingSource playlistAnalyzerBindingSource;
         private System.Windows.Forms.Panel AddressSpace;
         private System.Windows.Forms.TextBox YouTubeUrlInput;
-        private System.Windows.Forms.Button AddEntryBtn;
+        private System.Windows.Forms.Button OpenBatchButton;
         private System.Windows.Forms.Label UrlEnterLabel;
         private System.Windows.Forms.ErrorProvider UrlErrorProvider;
         private ItemPreview ListPreview;

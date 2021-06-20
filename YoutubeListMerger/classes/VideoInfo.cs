@@ -24,6 +24,8 @@ namespace YoutubeListMerger.Classes
         public bool IsVideo => true;
         public int ItemCount => 0;
 
+        private int References { get; set; }
+
         private VideoInfo(PlaylistItem playlistItem)
         {
             ID = playlistItem.ContentDetails.VideoId;
@@ -48,29 +50,41 @@ namespace YoutubeListMerger.Classes
 
         public static bool VideoExists(string videoId)
         {
-            return requestedVideos.FirstOrDefault(x => x.ID == videoId) != null;
+            var video = requestedVideos.FirstOrDefault(x => x.ID == videoId);
+            return video != null && video.References > 0;
         }
 
         public static VideoInfo GetVideo(PlaylistItem playlistItem)
         {
-            VideoInfo video = requestedVideos.SingleOrDefault(x => playlistItem.ContentDetails.VideoId == x.ID);
-            if (video == null)
+            VideoInfo result = requestedVideos.SingleOrDefault(x => playlistItem.ContentDetails.VideoId == x.ID);
+            if (result == null)
             {
-                video = new VideoInfo(playlistItem);
-                requestedVideos.Add(video);
+                result = new VideoInfo(playlistItem);
+                requestedVideos.Add(result);
             }
-            return video;
+            ++result.References;
+            return result;
         }
 
         public static VideoInfo GetVideo(Video video)
         {
             VideoInfo result = requestedVideos.SingleOrDefault(x => video.Id == x.ID);
-            if (video == null)
+            if (result == null)
             {
                 result = new VideoInfo(video);
                 requestedVideos.Add(result);
             }
+            ++result.References;
             return result;
+        }
+
+        public static void DereferenceVideo(VideoInfo video)
+        {
+            if (--video.References <= 0)
+            {
+                video.Thumbnail?.Dispose();
+                video.Thumbnail = null;
+            }
         }
 
         public bool Equals(VideoInfo other)
