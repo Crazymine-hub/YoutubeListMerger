@@ -38,18 +38,20 @@ namespace YoutubeListMerger
             this.ListPreview = new YoutubeListMerger.ItemPreview();
             this.VideoList = new System.Windows.Forms.ListBox();
             this.videoInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.VideoPreview = new YoutubeListMerger.ItemPreview();
             this.VideoListLabel = new System.Windows.Forms.Label();
+            this.VideoPreview = new YoutubeListMerger.ItemPreview();
             this.AddressSpace = new System.Windows.Forms.Panel();
-            this.AddEntryBtn = new System.Windows.Forms.Button();
             this.YouTubeUrlInput = new System.Windows.Forms.TextBox();
+            this.AddEntryBtn = new System.Windows.Forms.Button();
             this.OpenBatchButton = new System.Windows.Forms.Button();
             this.UrlEnterLabel = new System.Windows.Forms.Label();
             this.UrlErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.BatchFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.FooterPanel = new System.Windows.Forms.Panel();
-            this.MergeButton = new System.Windows.Forms.Button();
+            this.FilePlaylistButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
+            this.MergeButton = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Workspace)).BeginInit();
             this.Workspace.Panel1.SuspendLayout();
             this.Workspace.Panel2.SuspendLayout();
@@ -80,9 +82,9 @@ namespace YoutubeListMerger
             // 
             this.Workspace.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Workspace.Panel2.Controls.Add(this.VideoList);
-            this.Workspace.Panel2.Controls.Add(this.VideoPreview);
             this.Workspace.Panel2.Controls.Add(this.VideoListLabel);
-            this.Workspace.Size = new System.Drawing.Size(584, 424);
+            this.Workspace.Panel2.Controls.Add(this.VideoPreview);
+            this.Workspace.Size = new System.Drawing.Size(584, 395);
             this.Workspace.SplitterDistance = 272;
             this.Workspace.SplitterWidth = 50;
             this.Workspace.TabIndex = 0;
@@ -97,7 +99,7 @@ namespace YoutubeListMerger
             this.PlaylistList.ItemHeight = 18;
             this.PlaylistList.Location = new System.Drawing.Point(0, 25);
             this.PlaylistList.Name = "PlaylistList";
-            this.PlaylistList.Size = new System.Drawing.Size(272, 319);
+            this.PlaylistList.Size = new System.Drawing.Size(272, 290);
             this.PlaylistList.TabIndex = 2;
             this.PlaylistList.ValueMember = "UniqueId";
             this.PlaylistList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.PlaylistList_DrawItem);
@@ -120,11 +122,13 @@ namespace YoutubeListMerger
             // 
             // ListPreview
             // 
+            this.ListPreview.AllowVideoRemove = true;
             this.ListPreview.AutoScroll = true;
             this.ListPreview.Cursor = System.Windows.Forms.Cursors.UpArrow;
             this.ListPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ListPreview.Location = new System.Drawing.Point(0, 344);
+            this.ListPreview.Location = new System.Drawing.Point(0, 315);
             this.ListPreview.Name = "ListPreview";
+            this.ListPreview.ResizeThumbnail = false;
             this.ListPreview.Size = new System.Drawing.Size(272, 80);
             this.ListPreview.TabIndex = 3;
             this.ListPreview.RemoveButtonClicked += new System.EventHandler(this.ListPreview_RemoveButtonClicked);
@@ -137,7 +141,7 @@ namespace YoutubeListMerger
             this.VideoList.HorizontalScrollbar = true;
             this.VideoList.Location = new System.Drawing.Point(0, 25);
             this.VideoList.Name = "VideoList";
-            this.VideoList.Size = new System.Drawing.Size(262, 319);
+            this.VideoList.Size = new System.Drawing.Size(262, 290);
             this.VideoList.TabIndex = 1;
             this.VideoList.ValueMember = "ID";
             this.VideoList.SelectedValueChanged += new System.EventHandler(this.VideoList_SelectedValueChanged);
@@ -145,17 +149,6 @@ namespace YoutubeListMerger
             // videoInfoBindingSource
             // 
             this.videoInfoBindingSource.DataSource = typeof(YoutubeListMerger.Classes.VideoInfo);
-            // 
-            // VideoPreview
-            // 
-            this.VideoPreview.AutoScroll = true;
-            this.VideoPreview.Cursor = System.Windows.Forms.Cursors.UpArrow;
-            this.VideoPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.VideoPreview.Location = new System.Drawing.Point(0, 344);
-            this.VideoPreview.Name = "VideoPreview";
-            this.VideoPreview.Size = new System.Drawing.Size(262, 80);
-            this.VideoPreview.TabIndex = 4;
-            this.VideoPreview.RemoveButtonClicked += new System.EventHandler(this.VideoPreview_RemoveButtonClicked);
             // 
             // VideoListLabel
             // 
@@ -168,10 +161,22 @@ namespace YoutubeListMerger
             this.VideoListLabel.TabIndex = 2;
             this.VideoListLabel.Text = "&Videos";
             // 
+            // VideoPreview
+            // 
+            this.VideoPreview.AutoScroll = true;
+            this.VideoPreview.Cursor = System.Windows.Forms.Cursors.UpArrow;
+            this.VideoPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.VideoPreview.Location = new System.Drawing.Point(0, 315);
+            this.VideoPreview.Name = "VideoPreview";
+            this.VideoPreview.ResizeThumbnail = false;
+            this.VideoPreview.Size = new System.Drawing.Size(262, 80);
+            this.VideoPreview.TabIndex = 4;
+            this.VideoPreview.RemoveButtonClicked += new System.EventHandler(this.VideoPreview_RemoveButtonClicked);
+            // 
             // AddressSpace
             // 
-            this.AddressSpace.Controls.Add(this.AddEntryBtn);
             this.AddressSpace.Controls.Add(this.YouTubeUrlInput);
+            this.AddressSpace.Controls.Add(this.AddEntryBtn);
             this.AddressSpace.Controls.Add(this.OpenBatchButton);
             this.AddressSpace.Controls.Add(this.UrlEnterLabel);
             this.AddressSpace.Dock = System.Windows.Forms.DockStyle.Top;
@@ -179,6 +184,17 @@ namespace YoutubeListMerger
             this.AddressSpace.Name = "AddressSpace";
             this.AddressSpace.Size = new System.Drawing.Size(584, 37);
             this.AddressSpace.TabIndex = 5;
+            // 
+            // YouTubeUrlInput
+            // 
+            this.YouTubeUrlInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.YouTubeUrlInput.Location = new System.Drawing.Point(0, 16);
+            this.YouTubeUrlInput.Name = "YouTubeUrlInput";
+            this.YouTubeUrlInput.Size = new System.Drawing.Size(532, 20);
+            this.YouTubeUrlInput.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.YouTubeUrlInput, "Enter the Adress of a Youtube Video, Playlist or Channel");
+            this.YouTubeUrlInput.WordWrap = false;
+            this.YouTubeUrlInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.YouTubeUrlInput_PreviewKeyDown);
             // 
             // AddEntryBtn
             // 
@@ -191,18 +207,9 @@ namespace YoutubeListMerger
             this.AddEntryBtn.Size = new System.Drawing.Size(26, 21);
             this.AddEntryBtn.TabIndex = 3;
             this.AddEntryBtn.Text = "";
+            this.toolTip1.SetToolTip(this.AddEntryBtn, "Add this Link");
             this.AddEntryBtn.UseVisualStyleBackColor = true;
             this.AddEntryBtn.Click += new System.EventHandler(this.AddEntryBtn_Click);
-            // 
-            // YouTubeUrlInput
-            // 
-            this.YouTubeUrlInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.YouTubeUrlInput.Location = new System.Drawing.Point(0, 16);
-            this.YouTubeUrlInput.Name = "YouTubeUrlInput";
-            this.YouTubeUrlInput.Size = new System.Drawing.Size(558, 20);
-            this.YouTubeUrlInput.TabIndex = 1;
-            this.YouTubeUrlInput.WordWrap = false;
-            this.YouTubeUrlInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.YouTubeUrlInput_PreviewKeyDown);
             // 
             // OpenBatchButton
             // 
@@ -215,6 +222,7 @@ namespace YoutubeListMerger
             this.OpenBatchButton.Size = new System.Drawing.Size(26, 21);
             this.OpenBatchButton.TabIndex = 2;
             this.OpenBatchButton.Text = "";
+            this.toolTip1.SetToolTip(this.OpenBatchButton, "Load Batch from File");
             this.OpenBatchButton.UseVisualStyleBackColor = true;
             this.OpenBatchButton.Click += new System.EventHandler(this.OpenBatchButton_Click);
             this.OpenBatchButton.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AddEntryBtn_PreviewKeyDown);
@@ -242,6 +250,7 @@ namespace YoutubeListMerger
             // 
             // FooterPanel
             // 
+            this.FooterPanel.Controls.Add(this.FilePlaylistButton);
             this.FooterPanel.Controls.Add(this.ResetButton);
             this.FooterPanel.Controls.Add(this.MergeButton);
             this.FooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -250,38 +259,52 @@ namespace YoutubeListMerger
             this.FooterPanel.Size = new System.Drawing.Size(584, 29);
             this.FooterPanel.TabIndex = 6;
             // 
-            // MergeButton
+            // FilePlaylistButton
             // 
-            this.MergeButton.AutoSize = true;
-            this.MergeButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.MergeButton.Location = new System.Drawing.Point(502, 0);
-            this.MergeButton.Name = "MergeButton";
-            this.MergeButton.Size = new System.Drawing.Size(82, 29);
-            this.MergeButton.TabIndex = 0;
-            this.MergeButton.Text = "Merge Videos";
-            this.MergeButton.UseVisualStyleBackColor = true;
-            this.MergeButton.Click += new System.EventHandler(this.MergeButton_Click);
+            this.FilePlaylistButton.AutoSize = true;
+            this.FilePlaylistButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.FilePlaylistButton.Location = new System.Drawing.Point(293, 0);
+            this.FilePlaylistButton.Name = "FilePlaylistButton";
+            this.FilePlaylistButton.Size = new System.Drawing.Size(118, 29);
+            this.FilePlaylistButton.TabIndex = 2;
+            this.FilePlaylistButton.Text = "Load Playlist from File";
+            this.toolTip1.SetToolTip(this.FilePlaylistButton, "Load a previously merged list from file and proceed to the merge dialog.");
+            this.FilePlaylistButton.UseVisualStyleBackColor = true;
             // 
             // ResetButton
             // 
             this.ResetButton.AutoSize = true;
             this.ResetButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ResetButton.Location = new System.Drawing.Point(420, 0);
+            this.ResetButton.Location = new System.Drawing.Point(411, 0);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(82, 29);
             this.ResetButton.TabIndex = 1;
             this.ResetButton.Text = "Reset";
+            this.toolTip1.SetToolTip(this.ResetButton, "Remove all entries");
             this.ResetButton.UseVisualStyleBackColor = true;
             this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            // 
+            // MergeButton
+            // 
+            this.MergeButton.AutoSize = true;
+            this.MergeButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.MergeButton.Location = new System.Drawing.Point(493, 0);
+            this.MergeButton.Name = "MergeButton";
+            this.MergeButton.Size = new System.Drawing.Size(91, 29);
+            this.MergeButton.TabIndex = 0;
+            this.MergeButton.Text = "Merge Videos...";
+            this.toolTip1.SetToolTip(this.MergeButton, "Merge your current playlists.");
+            this.MergeButton.UseVisualStyleBackColor = true;
+            this.MergeButton.Click += new System.EventHandler(this.MergeButton_Click);
             // 
             // MergerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 461);
-            this.Controls.Add(this.FooterPanel);
             this.Controls.Add(this.Workspace);
             this.Controls.Add(this.AddressSpace);
+            this.Controls.Add(this.FooterPanel);
             this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "MergerForm";
             this.Text = "PlaylistMerger";
@@ -322,6 +345,8 @@ namespace YoutubeListMerger
         private System.Windows.Forms.Panel FooterPanel;
         private System.Windows.Forms.Button ResetButton;
         private System.Windows.Forms.Button MergeButton;
+        private System.Windows.Forms.Button FilePlaylistButton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
