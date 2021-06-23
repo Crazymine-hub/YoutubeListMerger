@@ -306,7 +306,7 @@ namespace YoutubeListMerger
         private void MergeButton_Click(object sender, EventArgs e)
         {
             if (scheduledAnalyzes.Count + activeAnalyzes.Count > 0) return;
-
+            new ResultForm().ShowDialog();
         }
     }
 }

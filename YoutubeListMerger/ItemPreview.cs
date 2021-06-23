@@ -15,8 +15,12 @@ namespace YoutubeListMerger
     {
         public event EventHandler RemoveButtonClicked;
         private YoutubeItemDetail item;
+
+        [DefaultValue(true)]
+        public bool ResizeThumbnail { get; set; } = true;
         [DefaultValue(false)]
         public bool AllowVideoRemove { get; set; }
+
         public ItemPreview()
         {
             InitializeComponent();
@@ -74,6 +78,12 @@ namespace YoutubeListMerger
             if (item == null || item.ChannelId == null) return;
             var settings = Properties.Settings.Default;
             System.Diagnostics.Process.Start(settings.YouTubeDefaultUrl + settings.YouTubeChannelPath + item.ChannelId);
+        }
+
+        private void ItemPreview_Resize(object sender, EventArgs e)
+        {
+            if (!ResizeThumbnail) return;
+            Thumbnail.Width = Convert.ToInt32(Math.Round(Width * 0.22 + 60, MidpointRounding.AwayFromZero));
         }
     }
 }

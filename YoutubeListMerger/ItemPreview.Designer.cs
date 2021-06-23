@@ -30,7 +30,6 @@ namespace YoutubeListMerger
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.Thumbnail = new System.Windows.Forms.PictureBox();
             this.PreviewContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.RemoveEntry = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenPlaylistEntry = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,23 +38,10 @@ namespace YoutubeListMerger
             this.Title = new System.Windows.Forms.Label();
             this.ChannelName = new System.Windows.Forms.Label();
             this.Details = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).BeginInit();
+            this.Thumbnail = new System.Windows.Forms.PictureBox();
             this.PreviewContext.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).BeginInit();
             this.SuspendLayout();
-            // 
-            // Thumbnail
-            // 
-            this.Thumbnail.BackColor = System.Drawing.Color.Black;
-            this.Thumbnail.Dock = System.Windows.Forms.DockStyle.Left;
-            this.Thumbnail.ErrorImage = global::YoutubeListMerger.Properties.Resources.DefaultThumbnail;
-            this.Thumbnail.InitialImage = global::YoutubeListMerger.Properties.Resources.DefaultThumbnail;
-            this.Thumbnail.Location = new System.Drawing.Point(0, 0);
-            this.Thumbnail.Name = "Thumbnail";
-            this.Thumbnail.Size = new System.Drawing.Size(120, 80);
-            this.Thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Thumbnail.TabIndex = 0;
-            this.Thumbnail.TabStop = false;
-            this.Thumbnail.Click += new System.EventHandler(this.ItemPreview_Click);
             // 
             // PreviewContext
             // 
@@ -133,6 +119,20 @@ namespace YoutubeListMerger
             this.Details.TabIndex = 12;
             this.Details.Text = "Description";
             // 
+            // Thumbnail
+            // 
+            this.Thumbnail.BackColor = System.Drawing.Color.Black;
+            this.Thumbnail.Dock = System.Windows.Forms.DockStyle.Left;
+            this.Thumbnail.ErrorImage = global::YoutubeListMerger.Properties.Resources.DefaultThumbnail;
+            this.Thumbnail.InitialImage = global::YoutubeListMerger.Properties.Resources.DefaultThumbnail;
+            this.Thumbnail.Location = new System.Drawing.Point(0, 0);
+            this.Thumbnail.Name = "Thumbnail";
+            this.Thumbnail.Size = new System.Drawing.Size(120, 80);
+            this.Thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Thumbnail.TabIndex = 0;
+            this.Thumbnail.TabStop = false;
+            this.Thumbnail.Click += new System.EventHandler(this.ItemPreview_Click);
+            // 
             // ItemPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,8 +146,9 @@ namespace YoutubeListMerger
             this.Name = "ItemPreview";
             this.Size = new System.Drawing.Size(272, 80);
             this.Click += new System.EventHandler(this.ItemPreview_Click);
-            ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).EndInit();
+            this.Resize += new System.EventHandler(this.ItemPreview_Resize);
             this.PreviewContext.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Thumbnail)).EndInit();
             this.ResumeLayout(false);
 
         }
