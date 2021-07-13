@@ -52,6 +52,7 @@ namespace YoutubeListMerger
             this.ResetButton = new System.Windows.Forms.Button();
             this.MergeButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.errorMessage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Workspace)).BeginInit();
             this.Workspace.Panel1.SuspendLayout();
             this.Workspace.Panel2.SuspendLayout();
@@ -251,6 +252,7 @@ namespace YoutubeListMerger
             // 
             // FooterPanel
             // 
+            this.FooterPanel.Controls.Add(this.errorMessage);
             this.FooterPanel.Controls.Add(this.FilePlaylistButton);
             this.FooterPanel.Controls.Add(this.ResetButton);
             this.FooterPanel.Controls.Add(this.MergeButton);
@@ -298,6 +300,18 @@ namespace YoutubeListMerger
             this.toolTip1.SetToolTip(this.MergeButton, "Merge your current playlists.");
             this.MergeButton.UseVisualStyleBackColor = true;
             this.MergeButton.Click += new System.EventHandler(this.MergeButton_Click);
+            // 
+            // errorMessage
+            // 
+            this.errorMessage.AutoEllipsis = true;
+            this.errorMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.errorMessage.ForeColor = System.Drawing.Color.Red;
+            this.errorMessage.Location = new System.Drawing.Point(0, 0);
+            this.errorMessage.Name = "errorMessage";
+            this.errorMessage.Size = new System.Drawing.Size(293, 29);
+            this.errorMessage.TabIndex = 3;
+            this.errorMessage.UseMnemonic = false;
+            this.errorMessage.TextChanged += new System.EventHandler(this.errorMessage_TextChanged);
             // 
             // MergerForm
             // 
@@ -349,6 +363,7 @@ namespace YoutubeListMerger
         private System.Windows.Forms.Button FilePlaylistButton;
         private System.Windows.Forms.ToolTip toolTip1;
         internal System.Windows.Forms.BindingSource playlistAnalyzerBindingSource;
+        private System.Windows.Forms.Label errorMessage;
     }
 }
 

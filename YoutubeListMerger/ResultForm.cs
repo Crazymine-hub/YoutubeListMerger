@@ -22,11 +22,13 @@ namespace YoutubeListMerger
 
         private void RefreshBtn_Click(object sender, EventArgs e)
         {
+            videoInfoBindingSource.Clear();
             if (MergeAlphabet.Checked) MergeByAlphabet();
             else if (MergeDate.Checked) MergeByDate();
             else if (MergeZip.Checked) MergeByZipping();
             else if (MergeNone.Checked) MergeByConcatinating();
             else throw new InvalidOperationException("No merge mode selected");
+            listBox1_SelectedIndexChanged(this, null);
         }
 
         private void MergeByAlphabet()
@@ -34,10 +36,10 @@ namespace YoutubeListMerger
             List<VideoInfo> videos = new List<VideoInfo>();
             foreach (var playlist in playlists)
                 videos.AddRange(playlist.VideoList);
-            videos.OrderBy(x => x.Title);
-            if (MergeReverse.Checked) videos.Reverse();
-            foreach (VideoInfo video in videos)
-                videoInfoBindingSource.Add(videos);
+            IEnumerable<VideoInfo> ordered = videos.OrderBy(x => x.Title);
+            if (MergeReverse.Checked) ordered = ordered.Reverse();
+            foreach (VideoInfo video in ordered)
+                videoInfoBindingSource.Add(video);
         }
 
         private void MergeByDate()
@@ -45,10 +47,10 @@ namespace YoutubeListMerger
             List<VideoInfo> videos = new List<VideoInfo>();
             foreach (var playlist in playlists)
                 videos.AddRange(playlist.VideoList);
-            videos.OrderBy(x => x.PublishDate);
-            if (MergeReverse.Checked) videos.Reverse();
-            foreach (VideoInfo video in videos)
-                videoInfoBindingSource.Add(videos);
+            IEnumerable<VideoInfo> ordered = videos.OrderBy(x => x.PublishDate);
+            if (MergeReverse.Checked) ordered = ordered.Reverse();
+            foreach (VideoInfo video in ordered)
+                videoInfoBindingSource.Add(video);
         }
 
         private void MergeByZipping()
@@ -64,13 +66,13 @@ namespace YoutubeListMerger
                 playlistEntries[i] = (playlist, reverseOrder ? playlist.ItemCount - 1 : 0);
             }
 
-            bool hasAddedItems = false;
+            bool hasAddedItems;
             do
             {
                 hasAddedItems = false;
                 for (int i = 0; i < playlistEntries.Length; ++i)
                 {
-                    int limitPos = reverseOrder ? 0 : playlistEntries[i].playlist.ItemCount - 1;
+                    int limitPos = reverseOrder ? -1 : playlistEntries[i].playlist.ItemCount;
                     if (playlistEntries[i].position == limitPos) continue;
 
                     videoInfoBindingSource.Add(playlistEntries[i].playlist.VideoList[playlistEntries[i].position]);
@@ -96,7 +98,7 @@ namespace YoutubeListMerger
                     for (int i = playlist.ItemCount - 1; i >= 0; --i)
                         videoInfoBindingSource.Add(playlist.VideoList[i]);
                 else
-                    for (int i = 01; i < playlist.ItemCount; ++i)
+                    for (int i = 0; i < playlist.ItemCount; ++i)
                         videoInfoBindingSource.Add(playlist.VideoList[i]);
             }
         }

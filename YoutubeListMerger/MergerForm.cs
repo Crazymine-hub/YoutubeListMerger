@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -107,6 +108,7 @@ namespace YoutubeListMerger
         private void AddEntryBtn_Click(object sender, EventArgs e)
         {
             UrlErrorProvider.Clear();
+            errorMessage.Text = "";
             try
             {
                 ProcessUrl(YouTubeUrlInput.Text);
@@ -114,12 +116,14 @@ namespace YoutubeListMerger
             catch (DuplicateListException)
             {
                 UrlErrorProvider.Icon = Properties.Resources.Warning;
-                UrlErrorProvider.SetError(UrlEnterLabel, "This Entry already Exists");
+                errorMessage.Text = "This Entry already Exists";
+                UrlErrorProvider.SetError(UrlEnterLabel, errorMessage.Text);
             }
             catch
             {
                 UrlErrorProvider.Icon = Properties.Resources.Error;
-                UrlErrorProvider.SetError(UrlEnterLabel, "This is not a valid YouTube URL");
+                errorMessage.Text = "This is not a valid YouTube URL";
+                UrlErrorProvider.SetError(UrlEnterLabel, errorMessage.Text);
             }
             finally
             {
@@ -305,10 +309,15 @@ namespace YoutubeListMerger
 
         private void MergeButton_Click(object sender, EventArgs e)
         {
-            UrlErrorProvider.SetError(MergeButton, null);
+            errorMessage.Text = "";
             if (scheduledAnalyzes.Count + activeAnalyzes.Count > 0)
             {
-                UrlErrorProvider.SetError(MergeButton, "At least one Playlist must be added");
+                errorMessage.Text = "There are still playlists being analyzed!";
+                return;
+            }
+            if (playlistAnalyzerBindingSource.Count == 0)
+            {
+                errorMessage.Text = "At least one Playlist must be added!";
                 return;
             }
             new ResultForm(playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>()).ShowDialog();
@@ -321,7 +330,13 @@ namespace YoutubeListMerger
 
         private void playlistAnalyzerBindingSource_ListChanged(object sender, ListChangedEventArgs e)
         {
-            UrlErrorProvider.SetError(MergeButton, null);
+            errorMessage.Text = "";
+        }
+
+        private void errorMessage_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(errorMessage.Text))
+                SystemSounds.Asterisk.Play();
         }
     }
 }

@@ -42,7 +42,7 @@ namespace YoutubeListMerger
             this.MergeDate = new System.Windows.Forms.RadioButton();
             this.MergeAlphabet = new System.Windows.Forms.RadioButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.videoList = new System.Windows.Forms.ListBox();
             this.videoInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.VideoPreview = new YoutubeListMerger.ItemPreview();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -92,6 +92,7 @@ namespace YoutubeListMerger
             this.StartBingeBtn.Text = "Start binge watch";
             this.toolTip1.SetToolTip(this.StartBingeBtn, "Start binge watching in your Browser");
             this.StartBingeBtn.UseVisualStyleBackColor = true;
+            this.StartBingeBtn.Click += new System.EventHandler(this.StartBingeBtn_Click);
             // 
             // ExportCSVBtn
             // 
@@ -206,7 +207,7 @@ namespace YoutubeListMerger
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.listBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.videoList);
             // 
             // splitContainer1.Panel2
             // 
@@ -217,17 +218,18 @@ namespace YoutubeListMerger
             this.splitContainer1.SplitterWidth = 10;
             this.splitContainer1.TabIndex = 1;
             // 
-            // listBox1
+            // videoList
             // 
-            this.listBox1.DataSource = this.videoInfoBindingSource;
-            this.listBox1.DisplayMember = "Title";
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(0, 0);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(464, 431);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.ValueMember = "ID";
+            this.videoList.DataSource = this.videoInfoBindingSource;
+            this.videoList.DisplayMember = "Title";
+            this.videoList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoList.FormattingEnabled = true;
+            this.videoList.Location = new System.Drawing.Point(0, 0);
+            this.videoList.Name = "videoList";
+            this.videoList.Size = new System.Drawing.Size(464, 431);
+            this.videoList.TabIndex = 0;
+            this.videoList.ValueMember = "ID";
+            this.videoList.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // videoInfoBindingSource
             // 
@@ -275,7 +277,7 @@ namespace YoutubeListMerger
         private System.Windows.Forms.RadioButton MergeDate;
         private System.Windows.Forms.RadioButton MergeAlphabet;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox videoList;
         private System.Windows.Forms.BindingSource videoInfoBindingSource;
         private System.Windows.Forms.Button ExportCSVBtn;
         private System.Windows.Forms.Button YouTubeSaveBtn;

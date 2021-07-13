@@ -15,16 +15,16 @@ namespace YoutubeListMerger
     {
         public PlaylistOrder(IEnumerable<PlaylistAnalyzer> playlists)
         {
+            InitializeComponent();
             foreach (var playlist in playlists)
                 playlistSource.Add(playlist);
-            InitializeComponent();
             DialogResult = DialogResult.Cancel;
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            moveUpButton.Enabled = orderList.SelectedIndex >= 0;
-            moveDownButton.Enabled = orderList.SelectedIndex < playlistSource.Count;
+            moveUpButton.Enabled = orderList.SelectedIndex > 0;
+            moveDownButton.Enabled = orderList.SelectedIndex < playlistSource.Count - 1;
         }
 
         private void moveUpButton_Click(object sender, EventArgs e)
@@ -32,7 +32,8 @@ namespace YoutubeListMerger
             int index = orderList.SelectedIndex;
             object item = playlistSource[index];
             playlistSource.RemoveAt(index);
-            playlistSource.Insert(index - 1, item);
+            playlistSource.Insert(--index, item);
+            orderList.SelectedIndex = index;
         }
 
         private void moveDownButton_Click(object sender, EventArgs e)
@@ -40,7 +41,8 @@ namespace YoutubeListMerger
             int index = orderList.SelectedIndex;
             object item = playlistSource[index];
             playlistSource.RemoveAt(index);
-            playlistSource.Insert(index + 1, item);
+            playlistSource.Insert(++index, item);
+            orderList.SelectedIndex = index;
         }
 
         private void okButton_Click(object sender, EventArgs e)
