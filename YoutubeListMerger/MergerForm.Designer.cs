@@ -108,6 +108,7 @@ namespace YoutubeListMerger
             // playlistAnalyzerBindingSource
             // 
             this.playlistAnalyzerBindingSource.DataSource = typeof(YoutubeListMerger.Classes.PlaylistAnalyzer);
+            this.playlistAnalyzerBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.playlistAnalyzerBindingSource_ListChanged);
             // 
             // PlaylistTitleLabel
             // 
@@ -270,6 +271,7 @@ namespace YoutubeListMerger
             this.FilePlaylistButton.Text = "Load Playlist from File";
             this.toolTip1.SetToolTip(this.FilePlaylistButton, "Load a previously merged list from file and proceed to the merge dialog.");
             this.FilePlaylistButton.UseVisualStyleBackColor = true;
+            this.FilePlaylistButton.Click += new System.EventHandler(this.FilePlaylistButton_Click);
             // 
             // ResetButton
             // 
@@ -332,7 +334,6 @@ namespace YoutubeListMerger
         private System.Windows.Forms.ListBox VideoList;
         private System.Windows.Forms.Label VideoListLabel;
         private System.Windows.Forms.BindingSource videoInfoBindingSource;
-        private System.Windows.Forms.BindingSource playlistAnalyzerBindingSource;
         private System.Windows.Forms.Panel AddressSpace;
         private System.Windows.Forms.TextBox YouTubeUrlInput;
         private System.Windows.Forms.Button OpenBatchButton;
@@ -347,6 +348,7 @@ namespace YoutubeListMerger
         private System.Windows.Forms.Button MergeButton;
         private System.Windows.Forms.Button FilePlaylistButton;
         private System.Windows.Forms.ToolTip toolTip1;
+        internal System.Windows.Forms.BindingSource playlistAnalyzerBindingSource;
     }
 }
 

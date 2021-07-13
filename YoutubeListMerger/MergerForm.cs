@@ -305,8 +305,23 @@ namespace YoutubeListMerger
 
         private void MergeButton_Click(object sender, EventArgs e)
         {
-            if (scheduledAnalyzes.Count + activeAnalyzes.Count > 0) return;
-            new ResultForm().ShowDialog();
+            UrlErrorProvider.SetError(MergeButton, null);
+            if (scheduledAnalyzes.Count + activeAnalyzes.Count > 0)
+            {
+                UrlErrorProvider.SetError(MergeButton, "At least one Playlist must be added");
+                return;
+            }
+            new ResultForm(playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>()).ShowDialog();
+        }
+
+        private void FilePlaylistButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void playlistAnalyzerBindingSource_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            UrlErrorProvider.SetError(MergeButton, null);
         }
     }
 }
