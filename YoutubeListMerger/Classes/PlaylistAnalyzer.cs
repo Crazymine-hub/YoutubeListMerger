@@ -15,6 +15,7 @@ namespace YoutubeListMerger.Classes
 
         private YT.YouTubeService youTube;
         private List<VideoInfo> videoList = new List<VideoInfo>();
+        private IReadOnlyList<VideoInfo> readOnlyVideoList;
 
         public string ID { get; }
         public string UniqueId { get => (IsChannelPlaylist ? "C_" : "L_") + Title; }
@@ -31,7 +32,7 @@ namespace YoutubeListMerger.Classes
         public bool IsVideo => false;
         public int ItemCount => videoList.Count;
 
-        public IReadOnlyList<VideoInfo> VideoList => videoList.AsReadOnly();
+        public IReadOnlyList<VideoInfo> VideoList => readOnlyVideoList ?? (readOnlyVideoList = videoList.AsReadOnly());
         public long TotalVideos { get; private set; }
         public bool IsChannelPlaylist { get; }
         public Task WorkerTask { get; private set; }
@@ -79,6 +80,7 @@ namespace YoutubeListMerger.Classes
                 AnalyzePlaylist();
 
             finishedCallback?.Invoke(this, new EventArgs());
+            readOnlyVideoList = null;
         }
 
         private void AnalyzePlaylist()
@@ -161,12 +163,14 @@ namespace YoutubeListMerger.Classes
             var videoQuery = new YT.VideosResource.ListRequest(youTube, new string[] { "id", "snippet", "contentDetails" }) { Id = videoId };
             var queryResult = videoQuery.Execute();
             videoList.Add(VideoInfo.GetVideo(queryResult.Items[0]));
+            readOnlyVideoList = null;
         }
 
         public void RemoveVideo(VideoInfo videoInfo)
         {
             if (!IsCustom) throw new InvalidOperationException("Only custom Playlists can be modified");
             videoList.Remove(videoInfo);
+            readOnlyVideoList = null;
         }
 
         public void Dispose()
