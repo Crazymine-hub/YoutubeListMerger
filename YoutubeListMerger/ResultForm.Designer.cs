@@ -31,10 +31,10 @@ namespace YoutubeListMerger
         {
             this.components = new System.ComponentModel.Container();
             this.Toolbox = new System.Windows.Forms.Panel();
+            this.RefreshBtn = new System.Windows.Forms.Button();
             this.StartBingeBtn = new System.Windows.Forms.Button();
             this.ExportCSVBtn = new System.Windows.Forms.Button();
             this.YouTubeSaveBtn = new System.Windows.Forms.Button();
-            this.RefreshBtn = new System.Windows.Forms.Button();
             this.MergeReverse = new System.Windows.Forms.CheckBox();
             this.ModeSelect = new System.Windows.Forms.GroupBox();
             this.MergeNone = new System.Windows.Forms.RadioButton();
@@ -69,9 +69,22 @@ namespace YoutubeListMerger
             this.Toolbox.Size = new System.Drawing.Size(200, 521);
             this.Toolbox.TabIndex = 0;
             // 
+            // RefreshBtn
+            // 
+            this.RefreshBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.RefreshBtn.Location = new System.Drawing.Point(0, 104);
+            this.RefreshBtn.Name = "RefreshBtn";
+            this.RefreshBtn.Size = new System.Drawing.Size(200, 23);
+            this.RefreshBtn.TabIndex = 2;
+            this.RefreshBtn.Text = "Merge";
+            this.toolTip1.SetToolTip(this.RefreshBtn, "Apply the current settings");
+            this.RefreshBtn.UseVisualStyleBackColor = true;
+            this.RefreshBtn.Click += new System.EventHandler(this.RefreshBtn_Click);
+            // 
             // StartBingeBtn
             // 
             this.StartBingeBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.StartBingeBtn.Enabled = false;
             this.StartBingeBtn.Location = new System.Drawing.Point(0, 434);
             this.StartBingeBtn.Name = "StartBingeBtn";
             this.StartBingeBtn.Size = new System.Drawing.Size(200, 23);
@@ -83,6 +96,7 @@ namespace YoutubeListMerger
             // ExportCSVBtn
             // 
             this.ExportCSVBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ExportCSVBtn.Enabled = false;
             this.ExportCSVBtn.Location = new System.Drawing.Point(0, 457);
             this.ExportCSVBtn.Name = "ExportCSVBtn";
             this.ExportCSVBtn.Size = new System.Drawing.Size(200, 23);
@@ -95,6 +109,7 @@ namespace YoutubeListMerger
             // 
             this.YouTubeSaveBtn.AutoSize = true;
             this.YouTubeSaveBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.YouTubeSaveBtn.Enabled = false;
             this.YouTubeSaveBtn.Location = new System.Drawing.Point(0, 480);
             this.YouTubeSaveBtn.Name = "YouTubeSaveBtn";
             this.YouTubeSaveBtn.Size = new System.Drawing.Size(200, 41);
@@ -102,17 +117,6 @@ namespace YoutubeListMerger
             this.YouTubeSaveBtn.Text = "Save to YouTube Playlist\r\n(Login Required)";
             this.toolTip1.SetToolTip(this.YouTubeSaveBtn, "Login to YouTube and Create a new Playlist");
             this.YouTubeSaveBtn.UseVisualStyleBackColor = true;
-            // 
-            // RefreshBtn
-            // 
-            this.RefreshBtn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.RefreshBtn.Location = new System.Drawing.Point(0, 104);
-            this.RefreshBtn.Name = "RefreshBtn";
-            this.RefreshBtn.Size = new System.Drawing.Size(200, 23);
-            this.RefreshBtn.TabIndex = 2;
-            this.RefreshBtn.Text = "Merge";
-            this.toolTip1.SetToolTip(this.RefreshBtn, "Apply the current settings");
-            this.RefreshBtn.UseVisualStyleBackColor = true;
             // 
             // MergeReverse
             // 
@@ -122,7 +126,7 @@ namespace YoutubeListMerger
             this.MergeReverse.Name = "MergeReverse";
             this.MergeReverse.Size = new System.Drawing.Size(200, 17);
             this.MergeReverse.TabIndex = 1;
-            this.MergeReverse.Text = "Reverse Videos";
+            this.MergeReverse.Text = "Reverse Video order";
             this.toolTip1.SetToolTip(this.MergeReverse, "Reverse the order of the Videos");
             this.MergeReverse.UseVisualStyleBackColor = true;
             // 
@@ -149,7 +153,7 @@ namespace YoutubeListMerger
             this.MergeNone.Name = "MergeNone";
             this.MergeNone.Size = new System.Drawing.Size(194, 17);
             this.MergeNone.TabIndex = 3;
-            this.MergeNone.Text = "None (Concat)";
+            this.MergeNone.Text = "Concatenate";
             this.toolTip1.SetToolTip(this.MergeNone, "Simply concats the Playlists");
             this.MergeNone.UseVisualStyleBackColor = true;
             // 
@@ -162,8 +166,8 @@ namespace YoutubeListMerger
             this.MergeZip.Size = new System.Drawing.Size(194, 17);
             this.MergeZip.TabIndex = 2;
             this.MergeZip.Text = "Zip";
-            this.toolTip1.SetToolTip(this.MergeZip, "Cycles throgh the playlists and adds one video until all videos are added. licke " +
-        "a Zipper.");
+            this.toolTip1.SetToolTip(this.MergeZip, "Cycles throgh the playlists and adds one video until all videos are added.\r\nJust " +
+        "like a Zipper.");
             this.MergeZip.UseVisualStyleBackColor = true;
             // 
             // MergeDate
