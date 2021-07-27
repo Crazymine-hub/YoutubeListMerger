@@ -253,6 +253,7 @@ namespace YoutubeListMerger
             this.Controls.Add(this.Toolbox);
             this.MinimumSize = new System.Drawing.Size(680, 560);
             this.Name = "ResultForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Merge Result";
             this.Toolbox.ResumeLayout(false);
             this.Toolbox.PerformLayout();

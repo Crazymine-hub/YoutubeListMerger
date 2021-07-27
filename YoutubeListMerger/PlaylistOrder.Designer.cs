@@ -161,6 +161,7 @@ namespace YoutubeListMerger
             this.Name = "PlaylistOrder";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PlaylistOrder";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

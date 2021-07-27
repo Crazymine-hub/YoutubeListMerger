@@ -320,7 +320,7 @@ namespace YoutubeListMerger
                 errorMessage.Text = "At least one Playlist must be added!";
                 return;
             }
-            new ResultForm(playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>()).ShowDialog();
+            new ResultForm(playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>()).ShowDialog(this);
         }
 
         private void FilePlaylistButton_Click(object sender, EventArgs e)

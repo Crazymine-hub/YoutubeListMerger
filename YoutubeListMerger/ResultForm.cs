@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +16,17 @@ namespace YoutubeListMerger
 {
     public partial class ResultForm : Form
     {
+        [System.Runtime.InteropServices.DllImport("Shell32.dll")]
+        private static extern int FindExecutable(string lpFile, string lpDirectory, StringBuilder lpResult);
+
         List<PlaylistAnalyzer> playlists;
+        bool continueBinge = false;
         public ResultForm(IEnumerable<PlaylistAnalyzer> listsToMerge)
         {
             InitializeComponent();
             playlists = listsToMerge.ToList();
         }
+
 
         private void RefreshBtn_Click(object sender, EventArgs e)
         {
@@ -58,7 +66,7 @@ namespace YoutubeListMerger
             PlaylistOrder orderDialog = new PlaylistOrder(playlists);
             bool reverseOrder = MergeReverse.Checked;
 
-            if (orderDialog.ShowDialog() != DialogResult.OK) return;
+            if (orderDialog.ShowDialog(this) != DialogResult.OK) return;
             (PlaylistAnalyzer playlist, int position)[] playlistEntries = new (PlaylistAnalyzer, int)[orderDialog.playlistSource.Count];
             for (int i = 0; i < playlistEntries.Length; ++i)
             {
@@ -90,9 +98,9 @@ namespace YoutubeListMerger
             PlaylistOrder orderDialog = new PlaylistOrder(playlists);
             bool reverseOrder = MergeReverse.Checked;
 
-            if (orderDialog.ShowDialog() != DialogResult.OK) return;
+            if (orderDialog.ShowDialog(this) != DialogResult.OK) return;
 
-            foreach(PlaylistAnalyzer playlist in orderDialog.playlistSource)
+            foreach (PlaylistAnalyzer playlist in orderDialog.playlistSource)
             {
                 if (reverseOrder)
                     for (int i = playlist.ItemCount - 1; i >= 0; --i)
@@ -102,5 +110,56 @@ namespace YoutubeListMerger
                         videoInfoBindingSource.Add(playlist.VideoList[i]);
             }
         }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var video = (VideoInfo)videoList.SelectedItem;
+            VideoPreview.UpdateDisplay(video);
+            StartBingeBtn.Enabled = true;
+        }
+
+        private void StartBingeBtn_Click(object sender, EventArgs e)
+        {
+            continueBinge = true;
+            var bingeTask = Task.Run(StartBingeWatch);
+            MessageBox.Show(this, "Click OK to stop binging.", "Binge Watching Youtube Videos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            continueBinge = false;
+        }
+
+        private void StartBingeWatch()
+        {
+            int index = -1;
+            Invoke((MethodInvoker)delegate { index = videoList.SelectedIndex; });
+            string browserExe = GetDefaultBrowser();
+            while (index < videoInfoBindingSource.Count && continueBinge)
+            {
+                Invoke((MethodInvoker)delegate { videoList.SelectedIndex = index; });
+                VideoInfo video = (VideoInfo)videoInfoBindingSource[index];
+
+                //IEnumerable<Process> GetBrowserProcesses() =>
+                //    Process.GetProcesses().Where(x => x.StartInfo.FileName.Equals(browserExe, StringComparison.InvariantCultureIgnoreCase));
+
+                //var browsers = GetBrowserProcesses().Select(x => x.Id);
+
+                Process.Start(browserExe, $"https://youtu.be/{video.ID}").WaitForExit();
+                //var newBrowsers = GetBrowserProcesses().Where(x => !browsers.Contains(x.Id)).ToArray();
+                //if (newBrowsers.Length != 1) throw new Exception("Couldn't identify system browser");
+                //newBrowsers[0].WaitForExit();
+
+                ++index;
+            }
+        }
+
+        private string GetDefaultBrowser()
+        {
+            StringBuilder browserName = new StringBuilder(255);
+            string filePath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), "blankpage.html");
+            File.WriteAllText(filePath, "", Encoding.UTF8);
+            int hresult = FindExecutable(filePath, null, browserName);
+            if (hresult <= 32)
+                throw new Exception($"FindExecutable: hResult was {hresult}");
+            return browserName.ToString();
+        }
     }
 }
+
