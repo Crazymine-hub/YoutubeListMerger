@@ -5,12 +5,6 @@
     <Setting Name="MaxConcurrentAnalyzes" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="AnalyzeDelay" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">500</Value>
-    </Setting>
-    <Setting Name="AnalyzePauseInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
     <Setting Name="YouTubeDefaultUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.youtube.com/</Value>
     </Setting>

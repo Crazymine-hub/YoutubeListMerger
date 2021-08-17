@@ -108,7 +108,7 @@ namespace YoutubeListMerger
             // 
             // playlistSource
             // 
-            this.playlistSource.DataSource = typeof(YoutubeListMerger.Classes.PlaylistAnalyzer);
+            this.playlistSource.DataSource = typeof(YouTubeTools.PlaylistAnalyzer);
             // 
             // panel2
             // 

@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YoutubeListMerger.Classes;
+using YouTubeTools;
 
 namespace YoutubeListMerger
 {
@@ -320,7 +321,7 @@ namespace YoutubeListMerger
                 errorMessage.Text = "At least one Playlist must be added!";
                 return;
             }
-            new ResultForm(playlistAnalyzerBindingSource.Cast<PlaylistAnalyzer>()).ShowDialog(this);
+            new ResultForm(playlistAnalyzerBindingSource.Cast<YouTubeTools.PlaylistAnalyzer>()).ShowDialog(this);
         }
 
         private void FilePlaylistButton_Click(object sender, EventArgs e)

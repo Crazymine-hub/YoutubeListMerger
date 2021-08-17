@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using YT = Google.Apis.YouTube.v3;
 
-namespace YoutubeListMerger.Classes
+namespace YouTubeTools
 {
     public class PlaylistAnalyzer : YoutubeItemDetail, IDisposable
     {

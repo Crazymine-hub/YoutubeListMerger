@@ -233,7 +233,7 @@ namespace YoutubeListMerger
             // 
             // videoInfoBindingSource
             // 
-            this.videoInfoBindingSource.DataSource = typeof(YoutubeListMerger.Classes.VideoInfo);
+            this.videoInfoBindingSource.DataSource = typeof(YouTubeTools.VideoInfo);
             // 
             // VideoPreview
             // 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YoutubeListMerger.Classes;
+using YouTubeTools;
 
 namespace YoutubeListMerger
 {
@@ -37,7 +38,7 @@ namespace YoutubeListMerger
             }
             PreviewContext.Enabled = true;
             if (item.Thumbnail == null)
-                item.Thumbnail = OnlineImage.GetBestResolution(item.Thumbnails);
+                item.Thumbnail = OnlineImage.GetImageFromUrl(item.Thumbnails);
             Thumbnail.Image = item.Thumbnail;
             Title.Text = item.Title;
             if (item.ItemCount > 0)

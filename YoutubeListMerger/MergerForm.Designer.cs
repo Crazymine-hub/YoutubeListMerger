@@ -108,7 +108,7 @@ namespace YoutubeListMerger
             // 
             // playlistAnalyzerBindingSource
             // 
-            this.playlistAnalyzerBindingSource.DataSource = typeof(YoutubeListMerger.Classes.PlaylistAnalyzer);
+            this.playlistAnalyzerBindingSource.DataSource = typeof(YouTubeTools.PlaylistAnalyzer);
             this.playlistAnalyzerBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.playlistAnalyzerBindingSource_ListChanged);
             // 
             // PlaylistTitleLabel
@@ -150,7 +150,7 @@ namespace YoutubeListMerger
             // 
             // videoInfoBindingSource
             // 
-            this.videoInfoBindingSource.DataSource = typeof(YoutubeListMerger.Classes.VideoInfo);
+            this.videoInfoBindingSource.DataSource = typeof(YouTubeTools.VideoInfo);
             // 
             // VideoListLabel
             // 

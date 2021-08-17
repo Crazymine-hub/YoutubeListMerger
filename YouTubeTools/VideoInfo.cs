@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace YoutubeListMerger.Classes
+namespace YouTubeTools
 {
     public class VideoInfo : YoutubeItemDetail, IEquatable<VideoInfo>
     {

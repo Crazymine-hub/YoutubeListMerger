@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YoutubeListMerger.Classes;
+using YouTubeTools;
 
 namespace YoutubeListMerger
 {
