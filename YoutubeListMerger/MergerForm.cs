@@ -19,7 +19,7 @@ namespace YoutubeListMerger
 {
     public partial class MergerForm : Form
     {
-        private YouTubeService youTube = new YouTubeService(new BaseClientService.Initializer() { ApiKey = File.ReadAllText("./API.key") });
+        private YouTubeService youTube;
         private PlaylistAnalyzer videoPlaylist;
         private Stack<Task> scheduledAnalyzes = new Stack<Task>();
         private List<Task> activeAnalyzes = new List<Task>();
@@ -35,7 +35,25 @@ namespace YoutubeListMerger
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (!File.Exists(Properties.Settings.Default.ApiKeyFilePath))
+                    File.Create(Properties.Settings.Default.ApiKeyFilePath).Close();
+                string apiKey = File.ReadAllLines(Properties.Settings.Default.ApiKeyFilePath)[0];
+                youTube = new YouTubeService(new BaseClientService.Initializer()
+                {
+                    ApiKey = apiKey
+                });
+                var _ = youTube.Tests.Insert(new Google.Apis.YouTube.v3.Data.TestItem(), "test").Execute();
+            }
+            catch (Google.GoogleApiException)
+            {
+                ApiErrorDialog.Show("Unable to authenticate with provided API key.", "Invalid API key");
+            }
+            catch (IndexOutOfRangeException)
+            {
+                ApiErrorDialog.Show("Please provide a YouTube API-Key in the first line of the API.key file.", "No Api Key found");
+            }
         }
 
         private void PlaylistList_DrawItem(object sender, DrawItemEventArgs e)
@@ -279,7 +297,7 @@ namespace YoutubeListMerger
                 }
                 if (hasError)
                     MessageBox.Show(errorLines.ToString(), "Invalid URLs skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if(duplicateCount > 0)
+                if (duplicateCount > 0)
                     MessageBox.Show($"Skipped {duplicateCount} duplicate(s).", "Duplicates skipped", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             UseWaitCursor = false;

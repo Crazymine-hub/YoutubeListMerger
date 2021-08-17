@@ -322,6 +322,7 @@ namespace YoutubeListMerger
             this.Controls.Add(this.Workspace);
             this.Controls.Add(this.AddressSpace);
             this.Controls.Add(this.FooterPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "MergerForm";
             this.Text = "PlaylistMerger";

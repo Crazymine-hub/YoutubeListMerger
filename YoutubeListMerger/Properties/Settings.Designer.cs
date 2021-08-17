@@ -70,5 +70,17 @@ namespace YoutubeListMerger.Properties {
                 return ((string)(this["YouTubePlaylistPath"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("./API.key")]
+        public string ApiKeyFilePath {
+            get {
+                return ((string)(this["ApiKeyFilePath"]));
+            }
+            set {
+                this["ApiKeyFilePath"] = value;
+            }
+        }
     }
 }
