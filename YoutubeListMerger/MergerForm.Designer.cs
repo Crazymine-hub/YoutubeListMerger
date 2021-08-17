@@ -278,6 +278,7 @@ namespace YoutubeListMerger
             // 
             this.FilePlaylistButton.AutoSize = true;
             this.FilePlaylistButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.FilePlaylistButton.Enabled = false;
             this.FilePlaylistButton.Location = new System.Drawing.Point(293, 0);
             this.FilePlaylistButton.Name = "FilePlaylistButton";
             this.FilePlaylistButton.Size = new System.Drawing.Size(118, 29);

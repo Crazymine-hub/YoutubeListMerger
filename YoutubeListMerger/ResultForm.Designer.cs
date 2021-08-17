@@ -89,7 +89,7 @@ namespace YoutubeListMerger
             this.StartBingeBtn.Name = "StartBingeBtn";
             this.StartBingeBtn.Size = new System.Drawing.Size(200, 23);
             this.StartBingeBtn.TabIndex = 5;
-            this.StartBingeBtn.Text = "Start binge watch";
+            this.StartBingeBtn.Text = "Start binge watch (beta)";
             this.toolTip1.SetToolTip(this.StartBingeBtn, "Start binge watching in your Browser");
             this.StartBingeBtn.UseVisualStyleBackColor = true;
             this.StartBingeBtn.Click += new System.EventHandler(this.StartBingeBtn_Click);
@@ -105,6 +105,7 @@ namespace YoutubeListMerger
             this.ExportCSVBtn.Text = "Save to File";
             this.toolTip1.SetToolTip(this.ExportCSVBtn, "Save your Playlist to a local File, you can open later");
             this.ExportCSVBtn.UseVisualStyleBackColor = true;
+            this.ExportCSVBtn.Click += new System.EventHandler(this.ExportCSVBtn_Click);
             // 
             // YouTubeSaveBtn
             // 

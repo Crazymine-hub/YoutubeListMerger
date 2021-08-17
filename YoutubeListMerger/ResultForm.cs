@@ -122,6 +122,8 @@ namespace YoutubeListMerger
         private void StartBingeBtn_Click(object sender, EventArgs e)
         {
             continueBinge = true;
+            MessageBox.Show("Make sure, your systems default browser is closed. Otherwise the process cannot be observerd properly.\r\n" +
+                "Close your Browser after you're done watching the current video and it will re-open with the next video.", "How to binge watch", MessageBoxButtons.OK, MessageBoxIcon.Information);
             var bingeTask = Task.Run(StartBingeWatch);
             MessageBox.Show(this, "Click OK to stop binging.", "Binge Watching Youtube Videos", MessageBoxButtons.OK, MessageBoxIcon.Information);
             continueBinge = false;
@@ -160,6 +162,11 @@ namespace YoutubeListMerger
             if (hresult <= 32)
                 throw new Exception($"FindExecutable: hResult was {hresult}");
             return browserName.ToString();
+        }
+
+        private void ExportCSVBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
