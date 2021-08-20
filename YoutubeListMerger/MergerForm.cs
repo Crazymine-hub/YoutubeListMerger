@@ -44,11 +44,13 @@ namespace YoutubeListMerger
                 {
                     ApiKey = apiKey
                 });
-                var _ = youTube.Tests.Insert(new Google.Apis.YouTube.v3.Data.TestItem(), "test").Execute();
+                var test = new PlaylistItemsResource.ListRequest(youTube, new string[] { "contentDetails", "snippet" });
+                test.Execute();
             }
-            catch (Google.GoogleApiException)
+            catch (Google.GoogleApiException ex)
             {
-                ApiErrorDialog.Show("Unable to authenticate with provided API key.", "Invalid API key");
+                if (ex.Error.Code != 400)
+                    ApiErrorDialog.Show("Unable to authenticate with provided API key.", "Invalid API key");
             }
             catch (IndexOutOfRangeException)
             {

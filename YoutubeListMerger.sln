@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeListMerger", "YoutubeListMerger.csproj", "{F3DC211D-351B-4462-8FB0-D46F5BF7A180}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeListMerger", ".\YoutubeListMerger\YoutubeListMerger.csproj", "{F3DC211D-351B-4462-8FB0-D46F5BF7A180}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTubeTools", "..\YouTubeTools\YouTubeTools.csproj", "{2822DDC8-32BD-461F-A0D5-243ACEDA2C2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTubeTools", ".\YouTubeTools\YouTubeTools.csproj", "{2822DDC8-32BD-461F-A0D5-243ACEDA2C2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
